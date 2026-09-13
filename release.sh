@@ -44,6 +44,14 @@ APP="build/Kliq.app"
 DMG="build/Kliq.dmg"
 STAGE="build/dmg"
 
+# Notarize the app on its own first and staple its ticket, so it opens even when
+# someone launches it for the first time without a network connection.
+echo "▸ notarizing the app with profile $NOTARY_PROFILE"
+ditto -c -k --keepParent "$APP" build/Kliq-app.zip
+xcrun notarytool submit build/Kliq-app.zip --keychain-profile "$NOTARY_PROFILE" --wait
+xcrun stapler staple "$APP"
+rm -f build/Kliq-app.zip
+
 echo "▸ packaging $DMG"
 rm -rf "$STAGE" "$DMG"
 mkdir -p "$STAGE"
