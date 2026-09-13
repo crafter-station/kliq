@@ -18,12 +18,14 @@ APP_NAME="Kliq"
 CONFIG="${CONFIG:-release}"
 BUILD_DIR="build"
 APP="$BUILD_DIR/$APP_NAME.app"
-# Prefer a real Apple Development identity when one is in the keychain: macOS
-# ties the Accessibility grant to the signature, and ad-hoc signatures change
-# on every build. Override with CODESIGN_IDENTITY, or set it to "-" for ad-hoc.
+# macOS ties the Accessibility grant to the signature, so sign local builds with the
+# same Developer ID that releases use when it's in the keychain; switching between
+# identities makes an existing grant stop applying. Falls back to an Apple
+# Development identity. Override with CODESIGN_IDENTITY, or set it to "-" for ad-hoc.
 if [ -z "${CODESIGN_IDENTITY:-}" ]; then
-  CODESIGN_IDENTITY=$(security find-identity -v -p codesigning 2>/dev/null \
-    | grep -m1 -oE '"Apple Development: [^"]+"' | tr -d '"' || true)
+  IDENTITIES=$(security find-identity -v -p codesigning 2>/dev/null || true)
+  CODESIGN_IDENTITY=$(echo "$IDENTITIES" | grep -m1 -oE '"Developer ID Application: [^"]+"' | tr -d '"' || true)
+  [ -n "$CODESIGN_IDENTITY" ] || CODESIGN_IDENTITY=$(echo "$IDENTITIES" | grep -m1 -oE '"Apple Development: [^"]+"' | tr -d '"' || true)
 fi
 IDENTITY="${CODESIGN_IDENTITY:--}"
 

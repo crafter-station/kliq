@@ -18,6 +18,7 @@ final class AppController {
     @ObservationIgnored private let hotKey = HotKeyManager()
     @ObservationIgnored private let notifier = Notifier()
     @ObservationIgnored private var recordingHotKey = false
+    @ObservationIgnored private var accessibilityRequests = 0
     @ObservationIgnored private var statusMenu: StatusMenuController?
     @ObservationIgnored private var settingsWindow: HostedWindowController?
     @ObservationIgnored private var onboardingWindow: HostedWindowController?
@@ -109,6 +110,30 @@ final class AppController {
     /// Asks macOS for permission to post sleep notifications.
     func requestNotificationPermission() {
         notifier.requestAuthorization()
+    }
+
+    /// Asks for Accessibility. A second click, or six seconds without permission,
+    /// brings up the reset option: macOS may be holding an entry for an earlier build
+    /// of Kliq that it neither applies nor asks about again.
+    func requestAccessibility() {
+        accessibilityRequests += 1
+        accessibility.requestAccess()
+        if accessibilityRequests >= 2 {
+            state.accessibilityStuck = !accessibility.isTrusted
+            return
+        }
+        Task { @MainActor [weak self] in
+            try? await Task.sleep(for: .seconds(6))
+            guard let self, !self.accessibility.isTrusted else { return }
+            self.state.accessibilityStuck = true
+        }
+    }
+
+    /// Clears Kliq's Accessibility entry and asks again.
+    func resetAccessibility() {
+        state.accessibilityStuck = false
+        accessibilityRequests = 0
+        accessibility.resetAndRequest()
     }
 
     func rescanSets() {
@@ -251,6 +276,10 @@ final class AppController {
 
     private func accessibilityChanged(_ trusted: Bool) {
         state.accessibilityGranted = trusted
+        if trusted {
+            state.accessibilityStuck = false
+            accessibilityRequests = 0
+        }
         log.notice("Accessibility trust changed: \(trusted)")
         if trusted {
             startInputMonitoring()

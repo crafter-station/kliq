@@ -15,4 +15,7 @@ final class AppState {
     var hotKeyUnavailable = false
     /// The user turned on sleep notifications but macOS notifications are off for Kliq.
     var notificationsDenied = false
+    /// Allow Access didn't lead to permission: macOS is likely holding an entry for an
+    /// earlier signature of Kliq, which it neither applies nor asks about again.
+    var accessibilityStuck = false
 }

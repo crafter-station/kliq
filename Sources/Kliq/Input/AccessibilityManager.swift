@@ -25,6 +25,23 @@ final class AccessibilityManager: NSObject {
         update(trusted)
     }
 
+    /// Clears Kliq's Accessibility entry, then asks again. macOS keeps one entry per
+    /// app; when it was granted to an earlier signature of Kliq the system neither
+    /// applies it nor shows the prompt again, so resetting lets the prompt appear.
+    func resetAndRequest() {
+        let bundleID = Bundle.main.bundleIdentifier ?? "run.crafter.kliq"
+        Task.detached { [weak self] in
+            let process = Process()
+            process.executableURL = URL(fileURLWithPath: "/usr/bin/tccutil")
+            process.arguments = ["reset", "Accessibility", bundleID]
+            process.standardOutput = FileHandle.nullDevice
+            process.standardError = FileHandle.nullDevice
+            try? process.run()
+            process.waitUntilExit()
+            await self?.requestAccess()
+        }
+    }
+
     func startPolling(interval: TimeInterval = 1.0) {
         self.interval = interval
         timer?.invalidate()

@@ -71,9 +71,11 @@ with `swift build`, assembles `build/Kliq.app`, and signs it with
 the hardened runtime. Regenerating the synthesized sounds needs `python3` with
 `numpy` and `scipy` (encoding uses macOS's built-in `afconvert`).
 
-macOS ties the Accessibility grant to the code signature, so `build.sh` prefers an
-Apple Development identity from your keychain, which keeps the permission across
-rebuilds. Override it, or force ad-hoc signing, with:
+macOS ties the Accessibility grant to the code signature, so `build.sh` signs with
+the same Developer ID as releases when it's in your keychain (falling back to an
+Apple Development identity). That keeps the permission working across rebuilds and
+releases; switching identities makes an existing grant silently stop applying.
+Override it, or force ad-hoc signing, with:
 
 ```
 CODESIGN_IDENTITY="Apple Development: Your Name (TEAMID)" ./build.sh

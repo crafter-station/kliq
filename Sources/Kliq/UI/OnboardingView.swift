@@ -32,9 +32,12 @@ struct OnboardingView: View {
                         Spacer()
                         if !state.accessibilityGranted {
                             Button("Open System Settings") { controller.accessibility.openSystemSettings() }
-                            Button("Allow Access") { controller.accessibility.requestAccess() }
+                            Button("Allow Access") { controller.requestAccessibility() }
                                 .buttonStyle(.borderedProminent)
                         }
+                    }
+                    if state.accessibilityStuck && !state.accessibilityGranted {
+                        AccessibilityResetRow()
                     }
                 }
 
@@ -79,5 +82,23 @@ struct OnboardingView: View {
 
     private func step<Content: View>(number: Int, title: String, @ViewBuilder content: () -> Content) -> some View {
         step(number: number, title: title, content: content) { EmptyView() }
+    }
+}
+
+/// Shown when Allow Access doesn't lead to permission. macOS then holds an entry for an
+/// earlier build of Kliq that it won't apply and won't ask about again; resetting it
+/// brings the system prompt back.
+struct AccessibilityResetRow: View {
+    @Environment(AppController.self) private var controller
+
+    var body: some View {
+        HStack(alignment: .firstTextBaseline, spacing: 12) {
+            Text("Still waiting? If Kliq already shows as on in System Settings, macOS is holding an older permission. Reset it, then allow Kliq when macOS asks.")
+                .font(.callout)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 8)
+            Button("Reset and Allow") { controller.resetAccessibility() }
+        }
     }
 }

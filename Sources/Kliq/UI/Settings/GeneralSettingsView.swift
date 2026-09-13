@@ -22,10 +22,17 @@ struct GeneralSettingsView: View {
                 }
                 if !state.accessibilityGranted {
                     LabeledContent {
-                        Button("Open System Settings") { controller.accessibility.openSystemSettings() }
+                        HStack(spacing: 8) {
+                            Button("Open System Settings") { controller.accessibility.openSystemSettings() }
+                            Button("Allow Access") { controller.requestAccessibility() }
+                                .buttonStyle(.borderedProminent)
+                        }
                     } label: {
                         Text("Allow Accessibility access")
                         Text("Kliq needs it to hear your keys.")
+                    }
+                    if state.accessibilityStuck {
+                        AccessibilityResetRow()
                     }
                 }
             }
