@@ -8,11 +8,17 @@
 <meta property="og:title" content="Kliq">
 <meta property="og:description" content="Every key, heard. Mechanical keyboard sounds for your Mac.">
 <meta property="og:url" content="https://kliq.crafter.run">
-<meta property="og:image" content="https://kliq.crafter.run/icon.png">
-<meta name="twitter:card" content="summary">
+<meta property="og:image" content="https://kliq.crafter.run/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Kliq: every key, heard. Mechanical keyboard sounds for your Mac.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://kliq.crafter.run/og.png">
 <meta name="theme-color" content="#2B2B2B">
-<link rel="icon" type="image/png" href="/icon.png">
-<link rel="apple-touch-icon" href="/icon.png">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@500&display=swap">
@@ -111,7 +117,11 @@
   @media (max-width: 960px) { .features { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 540px) { .features { grid-template-columns: 1fr; } }
 
-  footer { max-width: 1080px; margin: 56px auto 0; padding-block: 24px 40px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; font-size: 14px; color: var(--faint); }
+  .signature { max-width: 1000px; margin: 80px auto 0; }
+  .signature svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .signature .key { cursor: pointer; }
+
+  footer { max-width: 1080px; margin: 40px auto 0; padding-block: 24px 40px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; font-size: 14px; color: var(--faint); }
   footer a { text-decoration: none; }
   .heart { width: 15px; height: 15px; vertical-align: -2px; fill: var(--yellow); }
   footer a:hover { color: var(--text); }
@@ -188,12 +198,12 @@
         </div>
         <div class="box">
           <label for="pad" class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Type here to hear the switches</label>
-          <textarea id="pad" rows="3" placeholder="Type here to hear Thock…" spellcheck="false" autocomplete="off"></textarea>
+          <textarea id="pad" rows="3" placeholder="Type here to hear Butter…" spellcheck="false" autocomplete="off"></textarea>
           <div class="bar">
             <div class="sets" role="group" aria-label="Switch set">
-              <button type="button" id="set-thock" data-set="thock" aria-pressed="true">Thock</button>
-              <button type="button" id="set-clack" data-set="clack" aria-pressed="false">Clack</button>
-              <button type="button" id="set-linear" data-set="linear" aria-pressed="false">Linear</button>
+              <button type="button" id="set-butter" data-set="butter" aria-pressed="true">Butter</button>
+              <button type="button" id="set-glass" data-set="glass" aria-pressed="false">Glass</button>
+              <button type="button" id="set-obsidian" data-set="obsidian" aria-pressed="false">Obsidian</button>
             </div>
             <button type="button" class="round" id="sound" aria-pressed="true" aria-label="Sound on">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor"/><path id="wave" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
@@ -207,13 +217,17 @@
 
   <section class="features" aria-label="Features">
     <article class="feature"><div class="well"><svg id="art-switches" viewBox="0 0 320 150" aria-hidden="true"></svg></div>
-      <div class="txt"><h3>Three switches</h3><p>Thock, Clack and Linear, synthesized from scratch. Pick one from the menu bar.</p></div></article>
+      <div class="txt"><h3>Three switches</h3><p>Butter, Glass and Obsidian, synthesized from scratch. Pick one from the menu bar.</p></div></article>
     <article class="feature"><div class="well"><svg id="art-tune" viewBox="0 0 320 150" aria-hidden="true"></svg></div>
       <div class="txt"><h3>Tune it to taste</h3><p>Shape pitch and brightness, and choose which speakers or headphones play it.</p></div></article>
     <article class="feature"><div class="well"><svg id="art-shortcut" viewBox="0 0 320 150" aria-hidden="true"></svg></div>
       <div class="txt"><h3>Out of your way</h3><p>Lives in the menu bar. <kbd>⌃⌥K</kbd> turns it on or off from any app.</p></div></article>
     <article class="feature"><div class="well"><svg id="art-private" viewBox="0 0 320 150" aria-hidden="true"></svg></div>
       <div class="txt"><h3>It listens, it doesn't record</h3><p>It needs Accessibility access to hear key presses, never stores what you type, and makes no network requests.</p></div></article>
+  </section>
+
+  <section class="signature" aria-label="Crafter Station">
+    <svg id="art-crafter" viewBox="0 0 1000 200" role="img" aria-label="The word Crafter spelled in hand-cut keycaps"></svg>
   </section>
 
   <footer>
@@ -255,13 +269,17 @@
     const id = "clip" + uid++;
     let s = `<g${o.rot ? ` transform="rotate(${o.rot} ${o.x + o.w / 2} ${o.y + o.h / 2})"` : ""}>`;
     if (o.shadow) s += `<path d="${skirt}" transform="translate(5 6)" fill="${o.shadow}"${rough(seed)}/>`;
-    s += `<g class="key"${o.press ? ' data-press="1"' : ""}>`;
+    s += `<g class="key"${o.press ? ' data-press="1"' : ""}${o.letter ? ` data-letter="${o.letter}"` : ""}>`;
     s += `<path d="${skirt}" fill="${c.skirt}"${rough(seed)}/>`;
     if (o.fleck) s += `<clipPath id="${id}"><path d="${skirt}"/></clipPath><rect x="${o.x}" y="${o.y}" width="${o.w}" height="${o.h}" fill="${o.fleck}" filter="url(#fleck-${seed % 3})" clip-path="url(#${id})"/>`;
     s += `<path d="${rr(fx, fy, fw, fh, r * 0.7)}" fill="${c.face}"${rough(seed + 1)}/>`;
     if (o.legend) {
-      const size = Math.max(10, Math.min(fh * 0.36, 24));
-      s += `<text x="${(fx + fw * 0.13).toFixed(1)}" y="${(fy + size * 1.15).toFixed(1)}" font-family="Geist Mono, ui-monospace, monospace" font-weight="500" font-size="${size.toFixed(1)}" fill="${c.legend}">${o.legend}</text>`;
+      // Legends sit top-left like a real cap; `center` sets a big letter mid-face instead.
+      const size = o.center ? fh * 0.56 : Math.max(10, Math.min(fh * 0.36, 24));
+      const at = o.center
+        ? `x="${(fx + fw / 2).toFixed(1)}" y="${(fy + fh / 2 + size * 0.36).toFixed(1)}" text-anchor="middle"`
+        : `x="${(fx + fw * 0.13).toFixed(1)}" y="${(fy + size * 1.15).toFixed(1)}"`;
+      s += `<text ${at} font-family="Geist Mono, ui-monospace, monospace" font-weight="500" font-size="${size.toFixed(1)}" fill="${c.legend}">${o.legend}</text>`;
     }
     return s + `</g></g>`;
   }
@@ -349,6 +367,15 @@
     ripple(148, 75, C.navy, 1, 2) +
     `<g fill="none" stroke="${C.red}" stroke-width="7" stroke-linecap="round"${rough(3)}><circle cx="252" cy="75" r="26"/><path d="M234 57L270 93"/></g>`);
 
+  // The signature row: CRAFTER in keycaps, staggered like a real row of keys.
+  set("art-crafter", [..."CRAFTER"].map((letter, i) => keycap({
+    x: 22 + i * 138, y: 40 + (i % 2) * 16, w: 118, h: 110, legend: letter, center: true, letter,
+    cap: ["red", "green", "lav", "yellow", "navy", "clear", "red"][i],
+    shadow: [C.yellow, C.lavender, C.navy, C.red, C.yellow, C.navy, C.lavender][i],
+    fleck: [C.yellow, C.yellow, C.clear, C.red, null, C.lavender, C.yellow][i],
+    rot: [-6, 4, -3, 6, -5, 3, -4][i], seed: 20 + i,
+  })).join(""));
+
   set("decor-left",
     keycap({ x: 40, y: 30, w: 130, h: 118, cap: "green", legend: "W", shadow: C.lavender, fleck: C.yellow, rot: -12, seed: 1 }) +
     keycap({ x: 200, y: 120, w: 112, h: 102, cap: "red", legend: "E", shadow: C.yellow, fleck: C.yellow, rot: 10, seed: 2 }) +
@@ -369,7 +396,7 @@
   const pad = document.getElementById("pad");
   const soundBtn = document.getElementById("sound");
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let sprites = null, current = "thock", soundOn = true;
+  let sprites = null, current = "butter", soundOn = true;
   const ctx = new (window.AudioContext || window.webkitAudioContext)();
   const buffers = {};
   const spritesPromise = fetch("/sounds/sprites.json").then(r => r.json()).then(j => (sprites = j));
@@ -381,7 +408,7 @@
   // Load the default set as the page opens and the other two once it's idle, so the
   // first key press already has sound. Browsers keep audio suspended until a gesture.
   load(current);
-  (window.requestIdleCallback || (f => setTimeout(f, 1200)))(() => { load("clack"); load("linear"); });
+  (window.requestIdleCallback || (f => setTimeout(f, 1200)))(() => { load("glass"); load("obsidian"); });
 
   function audio() {
     if (ctx.state === "suspended") ctx.resume();
@@ -423,6 +450,18 @@
   });
   pad.addEventListener("keyup", e => { if (!e.metaKey && !e.ctrlKey) play(keyName(e), "up"); });
   pad.addEventListener("focus", () => { audio(); }, { once: true });
+
+  // CRAFTER keys press under the pointer and play their letter when clicked.
+  document.querySelectorAll("#art-crafter .key").forEach(key => {
+    const press = () => { key.classList.add("down"); setTimeout(() => key.classList.remove("down"), 110); };
+    key.addEventListener("pointerenter", () => { if (!reduce) press(); });
+    key.addEventListener("click", () => {
+      press();
+      const k = key.dataset.letter.toLowerCase();
+      play(k, "down");
+      setTimeout(() => play(k, "up"), 80);
+    });
+  });
 
   document.querySelectorAll(".sets button").forEach(button => button.addEventListener("click", async () => {
     current = button.dataset.set;

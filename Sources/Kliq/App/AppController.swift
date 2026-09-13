@@ -27,7 +27,7 @@ final class AppController {
     @ObservationIgnored private let firstEventSeen = OSAllocatedUnfairLock(initialState: false)
 
     /// The mellowest bundled set, chosen until the user picks another one.
-    private static let defaultSetName = "Synth Thock"
+    private static let defaultSetName = "Synth Butter"
     private static let noSoundsMessage = "Kliq couldn't find its sounds. Reinstalling Kliq should bring them back."
 
     // MARK: Lifecycle

@@ -15,7 +15,7 @@ import tempfile
 import wave
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-SETS = {"thock": "Synth Thock", "clack": "Synth Clack", "linear": "Synth Linear"}
+SETS = {"butter": "Synth Butter", "glass": "Synth Glass", "obsidian": "Synth Obsidian"}
 RATE = 24_000
 GAP = int(RATE * 0.02)
 

@@ -23,8 +23,7 @@ fi
 [ -n "$CODESIGN_IDENTITY" ] || { echo "no Developer ID Application identity in the keychain" >&2; exit 1; }
 
 # What ships must be exactly what is public in the repo: synthesized sets only,
-# no uncommitted or ignored files. Recorded packs belong in
-# ~/Library/Application Support/Kliq/Sounds, where the app also looks.
+# no uncommitted or ignored files.
 ls -d Resources/Sounds/*/ >/dev/null 2>&1 || { echo "no bundled sound sets in Resources/Sounds" >&2; exit 1; }
 for dir in Resources/Sounds/*/; do
   case "$(basename "$dir")" in
