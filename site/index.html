@@ -54,7 +54,7 @@
   /* Stage: the card floats in the middle, hand-cut keys spill in from the edges. */
   .stage { position: relative; max-width: 1080px; margin: 0 auto; padding-block: 36px 80px; }
   .decor { position: absolute; pointer-events: none; z-index: 0; }
-  .decor svg { display: block; width: 100%; height: auto; }
+  .decor svg { display: block; width: 100%; height: auto; overflow: visible; }
   .decor.left { left: -150px; top: -30px; width: 400px; }
   .decor.right { right: -150px; bottom: -10px; width: 420px; }
   @media (max-width: 1100px) { .decor.left { left: -230px; } .decor.right { right: -240px; } }
@@ -113,6 +113,7 @@
 
   footer { max-width: 1080px; margin: 56px auto 0; padding-block: 24px 40px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; font-size: 14px; color: var(--faint); }
   footer a { text-decoration: none; }
+  .heart { width: 15px; height: 15px; vertical-align: -2px; fill: var(--yellow); }
   footer a:hover { color: var(--text); }
 
   .key { transition: transform .07s ease-out; transform-box: fill-box; }
@@ -143,7 +144,7 @@
 </svg>
 
 <nav aria-label="Main">
-  <a class="brand" href="/"><svg class="mark" width="28" height="28" viewBox="0 0 100 100" aria-hidden="true"></svg>Kliq</a>
+  <a class="brand" href="/"><img class="mark" src="/icon.png" width="36" height="36" alt="">Kliq</a>
   <div class="navlinks">
     <a href="https://github.com/crafter-station/kliq">GitHub</a>
     <a class="solid" href="https://github.com/crafter-station/kliq/releases/latest/download/Kliq.dmg">Download</a>
@@ -158,7 +159,7 @@
     <section class="hero" aria-label="Kliq">
       <div class="tile red">
         <div class="copy">
-          <div class="mark-line"><svg class="mark" width="30" height="30" viewBox="0 0 100 100" aria-hidden="true"></svg>FOR MAC · FREE AND OPEN SOURCE</div>
+          <div class="mark-line"><img class="mark" src="/icon.png" width="38" height="38" alt="">FOR MAC · FREE AND OPEN SOURCE</div>
           <div>
             <h1>Every key, heard.</h1>
             <p>Mechanical keyboard sounds for every keystroke and click, from your menu bar.</p>
@@ -216,7 +217,7 @@
   </section>
 
   <footer>
-    <span>MIT License · Made by <a href="https://crafter.run">Crafter Station</a></span>
+    <span>Made with <svg class="heart" viewBox="0 0 24 24" role="img" aria-label="love"><path d="M12 21s-7.5-4.6-9.8-9.1C.6 8.6 2.4 4.5 6.3 4.5c2.3 0 3.9 1.3 5.7 3.4 1.8-2.1 3.4-3.4 5.7-3.4 3.9 0 5.7 4.1 4.1 7.4C19.5 16.4 12 21 12 21z"/></svg> from Latam by <a href="https://crafter.run">Crafter Station</a> · MIT License</span>
     <span><a href="https://github.com/crafter-station/kliq">GitHub</a> · <a href="https://github.com/crafter-station/kliq/releases">Releases</a></span>
   </footer>
 </main>
@@ -310,18 +311,7 @@
       `<path d="${rr(x, y, w, h, 26)}" fill="${color}"/><g clip-path="url(#${id})">${inner}</g>`;
   }
 
-  function mark() {
-    const w = [[29.5, 83.7], [83.7, 83.7], [83.7, 29.5], [74, 38], [74, 74], [38, 74]];
-    return `<rect width="100" height="100" rx="22.5" fill="#000"/><rect x=".5" y=".5" width="99" height="99" rx="22" fill="none" stroke="rgba(255,255,255,.18)"/>` +
-      `<g transform="translate(18.5 18.5) scale(.63)" fill="#fff" stroke="#fff">` +
-      `<path fill-rule="evenodd" stroke="none" d="${rr(0, 0, 100, 100, 17)} ${rr(8.5, 8.5, 83, 83, 10)}"/>` +
-      `<rect x="17.5" y="17.5" width="65" height="65" rx="5" fill="none" stroke-width="2.4"/>` +
-      `<polygon stroke="none" points="${w.map(p => p.join(",")).join(" ")}"/>` +
-      `<path d="M36.5 30.8V60.8M55.1 30.8L40.6 47L56.9 60.8" fill="none" stroke-width="8.2" stroke-linejoin="miter"/></g>`;
-  }
-
   const set = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
-  document.querySelectorAll("svg.mark").forEach(el => { el.innerHTML = mark(); });
 
   set("art-hero",
     tile(34, 70, 150, 150, C.green,
@@ -364,7 +354,7 @@
     keycap({ x: 200, y: 120, w: 112, h: 102, cap: "red", legend: "E", shadow: C.yellow, fleck: C.yellow, rot: 10, seed: 2 }) +
     keycap({ x: 50, y: 250, w: 134, h: 122, cap: "lav", shadow: C.navy, fleck: C.clear, rot: 6, seed: 3 }) +
     stem({ cx: 290, cy: 350, s: 92, color: C.clear, crossShadow: C.red, shadow: C.yellow, rot: -8, seed: 4 }) +
-    coil(10, 470, 320, 8, 26, C.yellow, 5) +
+    coil(40, 470, 300, 8, 26, C.yellow, 5) +
     keycap({ x: 170, y: 520, w: 104, h: 96, cap: "yellow", legend: "R", shadow: C.red, fleck: C.red, rot: -8, seed: 6 }));
 
   set("decor-right",
@@ -373,26 +363,29 @@
     keycap({ x: 230, y: 240, w: 126, h: 116, cap: "lav", legend: "U", shadow: C.red, fleck: C.clear, rot: -10, seed: 3 }) +
     keycap({ x: 110, y: 380, w: 108, h: 98, cap: "red", shadow: C.lavender, fleck: C.yellow, rot: 8, seed: 4 }) +
     ripple(236, 428, C.yellow, 1, 5, [30, 48, 66]) +
-    coil(20, 548, 360, 10, 18, C.clear, 6));
+    coil(40, 548, 340, 10, 18, C.clear, 6));
 
   // Sound: the app's own samples, one sprite per set, loaded on first use.
   const pad = document.getElementById("pad");
   const soundBtn = document.getElementById("sound");
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let ctx = null, sprites = null, current = "thock", soundOn = true;
+  let sprites = null, current = "thock", soundOn = true;
+  const ctx = new (window.AudioContext || window.webkitAudioContext)();
   const buffers = {};
-  let spritesPromise = null;
+  const spritesPromise = fetch("/sounds/sprites.json").then(r => r.json()).then(j => (sprites = j));
+  function load(name) {
+    buffers[name] = buffers[name] || fetch(`/sounds/${name}.wav`).then(r => r.arrayBuffer())
+      .then(b => new Promise((ok, fail) => ctx.decodeAudioData(b, ok, fail)));
+    return buffers[name];
+  }
+  // Load the default set as the page opens and the other two once it's idle, so the
+  // first key press already has sound. Browsers keep audio suspended until a gesture.
+  load(current);
+  (window.requestIdleCallback || (f => setTimeout(f, 1200)))(() => { load("clack"); load("linear"); });
 
   function audio() {
-    if (!ctx) ctx = new (window.AudioContext || window.webkitAudioContext)();
     if (ctx.state === "suspended") ctx.resume();
-    spritesPromise = spritesPromise || fetch("/sounds/sprites.json").then(r => r.json()).then(j => (sprites = j));
-    if (!buffers[current]) {
-      const name = current;
-      buffers[name] = fetch(`/sounds/${name}.wav`).then(r => r.arrayBuffer())
-        .then(b => new Promise((ok, fail) => ctx.decodeAudioData(b, ok, fail)));
-    }
-    return Promise.all([spritesPromise, buffers[current]]);
+    return Promise.all([spritesPromise, load(current)]);
   }
 
   const ROWS = ["qwertyuiop", "asdfghjkl", "zxcvbnm"];
