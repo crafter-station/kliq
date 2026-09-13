@@ -16,6 +16,13 @@ cd "$(dirname "$0")"
 
 VERSION="${1:?usage: ./release.sh <version>   e.g. ./release.sh 0.0.1}"
 NOTARY_PROFILE="${NOTARY_PROFILE:-kliq-notary}"
+# Credentials: an App Store Connect API key passed as NOTARY_KEY (path to the .p8),
+# NOTARY_KEY_ID and NOTARY_ISSUER, which needs no keychain; otherwise the profile above.
+if [ -n "${NOTARY_KEY:-}" ]; then
+  NOTARY_AUTH=(--key "$NOTARY_KEY" --key-id "$NOTARY_KEY_ID" --issuer "$NOTARY_ISSUER")
+else
+  NOTARY_AUTH=(--keychain-profile "$NOTARY_PROFILE")
+fi
 if [ -z "${CODESIGN_IDENTITY:-}" ]; then
   CODESIGN_IDENTITY=$(security find-identity -v -p codesigning 2>/dev/null \
     | grep -m1 -oE '"Developer ID Application: [^"]+"' | tr -d '"' || true)
@@ -46,9 +53,9 @@ STAGE="build/dmg"
 
 # Notarize the app on its own first and staple its ticket, so it opens even when
 # someone launches it for the first time without a network connection.
-echo "▸ notarizing the app with profile $NOTARY_PROFILE"
+echo "▸ notarizing the app"
 ditto -c -k --keepParent "$APP" build/Kliq-app.zip
-xcrun notarytool submit build/Kliq-app.zip --keychain-profile "$NOTARY_PROFILE" --wait
+xcrun notarytool submit build/Kliq-app.zip "${NOTARY_AUTH[@]}" --wait
 xcrun stapler staple "$APP"
 rm -f build/Kliq-app.zip
 
@@ -61,8 +68,8 @@ hdiutil create -volname "Kliq" -srcfolder "$STAGE" -ov -format UDZO "$DMG" >/dev
 rm -rf "$STAGE"
 codesign --force --timestamp --sign "$CODESIGN_IDENTITY" "$DMG"
 
-echo "▸ notarizing with profile $NOTARY_PROFILE (takes a few minutes)"
-xcrun notarytool submit "$DMG" --keychain-profile "$NOTARY_PROFILE" --wait
+echo "▸ notarizing the DMG (takes a few minutes)"
+xcrun notarytool submit "$DMG" "${NOTARY_AUTH[@]}" --wait
 xcrun stapler staple "$DMG"
 spctl --assess --type open --context context:primary-signature --verbose "$DMG"
 
