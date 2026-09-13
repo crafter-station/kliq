@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kliq · Mechanical keyboard sounds for your Mac</title>
+<meta name="description" content="A free, open source macOS menu bar app that plays mechanical keyboard sounds as you type, and goes quiet during calls.">
+<meta property="og:title" content="Kliq">
+<meta property="og:description" content="Mechanical keyboard sounds for every keystroke. Free and open source for macOS.">
+<meta property="og:url" content="https://kliq.crafter.run">
+<meta property="og:image" content="https://kliq.crafter.run/icon.png">
+<meta name="twitter:card" content="summary">
+<meta name="theme-color" content="#000000">
+<link rel="icon" type="image/png" href="/icon.png">
+<link rel="apple-touch-icon" href="/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap">
+<style>
+  :root {
+    --bg: #000; --panel: #0a0a0a; --line: #262626;
+    --text: #ededed; --muted: #a1a1a1; --accent: #ededed;
+    --cap: #171717; --cap-edge: #000;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); color: var(--text); }
+  body {
+    font: 16px/1.55 "Geist", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding-inline: 20px;
+  }
+  main { max-width: 880px; margin: 0 auto; padding-block: 72px 40px; }
+  a { color: inherit; }
+
+  .hero { text-align: center; }
+  .hero img { width: 136px; height: 136px; }
+  h1 { font-size: clamp(44px, 8vw, 68px); letter-spacing: -0.035em; line-height: 1; margin: 10px 0 14px; }
+  .lede { font-size: clamp(18px, 2.4vw, 21px); color: var(--muted); max-width: 560px; margin: 0 auto 30px; }
+  .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px; padding: 13px 22px;
+    border-radius: 12px; font-weight: 600; text-decoration: none; font-size: 16px;
+  }
+  .btn.primary { background: var(--accent); color: #0a0a0a; }
+  .btn.primary:hover { filter: brightness(1.08); }
+  .btn.ghost { border: 1px solid var(--line); }
+  .btn.ghost:hover { background: var(--panel); }
+  .fine { margin-top: 14px; font-size: 14px; color: var(--muted); }
+
+  .try { margin: 64px auto 0; max-width: 640px; background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 20px; }
+  .try-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+  .try-head strong { font-size: 15px; }
+  .sets { display: flex; gap: 8px; }
+  .sets button {
+    font: 600 13px/1 ui-monospace, SFMono-Regular, Menlo, monospace; cursor: pointer;
+    background: var(--cap); color: var(--text); border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px 11px;
+    box-shadow: inset 0 -3px 0 var(--cap-edge);
+  }
+  .sets button[aria-pressed="true"] { background: var(--accent); color: #0a0a0a; border-color: var(--accent); box-shadow: inset 0 -3px 0 #a1a1a1; }
+  .sets button:active { transform: translateY(1px); box-shadow: inset 0 -1px 0 var(--cap-edge); }
+  textarea {
+    width: 100%; min-height: 110px; resize: vertical; border-radius: 12px; border: 1px solid var(--line);
+    background: var(--bg); color: var(--text); padding: 14px; font: 16px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+  textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .try p { margin: 10px 0 0; font-size: 13px; color: var(--muted); }
+
+  .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 14px; margin-top: 64px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 20px; }
+  .card h3 { margin: 0 0 6px; font-size: 17px; }
+  .card p { margin: 0; color: var(--muted); font-size: 15px; }
+  kbd {
+    font: 600 0.85em ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--cap); color: var(--text);
+    border: 1px solid var(--line); border-radius: 6px; padding: 1px 7px 3px; box-shadow: inset 0 -2px 0 var(--cap-edge);
+  }
+
+  .privacy { margin-top: 56px; text-align: center; color: var(--muted); max-width: 620px; margin-inline: auto; font-size: 15px; }
+  .privacy strong { color: var(--text); }
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-size: 14px; color: var(--muted); }
+  footer a { text-decoration: none; }
+  footer a:hover { color: var(--text); }
+</style>
+</head>
+<body>
+<main>
+  <section class="hero">
+    <img src="/icon.png" alt="Kliq app icon: a keycap with the letter K" width="136" height="136">
+    <h1>Kliq</h1>
+    <p class="lede">Mechanical keyboard sounds for every keystroke and click. A tiny menu bar app for your Mac that goes quiet on its own when you're on a call.</p>
+    <div class="cta">
+      <a class="btn primary" href="https://github.com/crafter-station/kliq/releases/latest/download/Kliq.dmg">Download for Mac</a>
+      <a class="btn ghost" href="https://github.com/crafter-station/kliq">View on GitHub</a>
+    </div>
+    <p class="fine">Free and open source · macOS 15 or later · Apple silicon and Intel</p>
+  </section>
+
+  <!-- Hidden until the new switch sounds are in. -->
+  <section class="try" aria-labelledby="try-title" hidden>
+    <div class="try-head">
+      <strong id="try-title">Try the bundled switches</strong>
+      <div class="sets" role="group" aria-label="Switch set">
+        <button type="button" data-kind="thock" aria-pressed="true">Thock</button>
+        <button type="button" data-kind="clack" aria-pressed="false">Clack</button>
+        <button type="button" data-kind="linear" aria-pressed="false">Linear</button>
+      </div>
+    </div>
+    <textarea id="pad" placeholder="Type here…" spellcheck="false" aria-label="Type here to hear the switch sounds"></textarea>
+    <p>Synthesized in your browser with the same recipe the app uses. The app plays them for every key, in every app.</p>
+  </section>
+
+  <section class="features">
+    <div class="card"><h3>Sounds like a real board</h3><p>Separate press and release sounds, a little pitch variation per key, and stereo panning from left to right across the keyboard.</p></div>
+    <div class="card"><h3>Quiet during calls</h3><p>Sleeps automatically while another app uses your microphone or camera, and optionally while Music or Spotify is playing.</p></div>
+    <div class="card"><h3>Tune it to taste</h3><p>Pick a switch set, then shape the pitch and brightness and choose which speakers or headphones play it.</p></div>
+    <div class="card"><h3>Out of your way</h3><p>Lives in the menu bar. Toggle it with <kbd>⌃⌥K</kbd>, launch it at login, and add mouse clicks or a typewriter ding on Return.</p></div>
+  </section>
+
+  <p class="privacy"><strong>It listens, it doesn't record.</strong> Kliq needs the Accessibility permission to notice key presses in other apps. It never stores or changes what you type and makes no network requests. Read every line on GitHub.</p>
+
+  <footer>
+    <span>MIT License · Made by <a href="https://crafter.run">Crafter Station</a></span>
+    <span><a href="https://github.com/crafter-station/kliq">GitHub</a> · <a href="https://github.com/crafter-station/kliq/releases">Releases</a></span>
+  </footer>
+</main>
+
+<script>
+  // Browser port of Tools/gen_sounds.py: filtered noise transient plus damped resonators.
+  const KINDS = {
+    thock:  { body: [150, 240], ping: [700, 1300],  cutoff: 2400, tau: 0.042, noise: 0.55, bodyAmt: 1.00, pingAmt: 0.25, click: 0.10 },
+    clack:  { body: [240, 380], ping: [2300, 3800], cutoff: 7500, tau: 0.050, noise: 0.80, bodyAmt: 0.55, pingAmt: 0.70, click: 0.55 },
+    linear: { body: [180, 300], ping: [1100, 1900], cutoff: 3800, tau: 0.030, noise: 0.42, bodyAmt: 0.70, pingAmt: 0.30, click: 0.04 },
+  };
+  const ROWS = ["`1234567890-=", "qwertyuiop[]\\", "asdfghjkl;'", "zxcvbnm,./"];
+  const BIG = { " ": 1.5, Enter: 1.3, Backspace: 1.25 };
+  let ctx = null;
+  let kind = "thock";
+
+  function position(key) {
+    const k = key.toLowerCase();
+    for (const row of ROWS) {
+      const i = row.indexOf(k);
+      if (i >= 0) return i / (row.length - 1);
+    }
+    return key === " " ? 0.5 : 0.9;
+  }
+
+  function play(key, down) {
+    ctx = ctx || new AudioContext();
+    const p = KINDS[kind], rate = ctx.sampleRate, u = position(key), size = BIG[key] || 1;
+    const n = Math.floor(rate * (down ? 0.11 : 0.07) * size);
+    const buffer = ctx.createBuffer(1, n, rate), d = buffer.getChannelData(0);
+    const bodyF = (p.body[0] + (p.body[1] - p.body[0]) * u) * (0.94 + Math.random() * 0.12) / (1 + 0.6 * (size - 1));
+    const pingF = (p.ping[0] + (p.ping[1] - p.ping[0]) * u) * (0.92 + Math.random() * 0.16) / (1 + 0.3 * (size - 1));
+    const tau = p.tau * (down ? 1 : 0.55) * size;
+    const a1 = Math.exp(-2 * Math.PI * p.cutoff * (down ? 1 : 1.2) / rate), a2 = Math.exp(-2 * Math.PI * 9000 / rate);
+    const phase = Math.random() * 2 * Math.PI;
+    let lp1 = 0, lp2 = 0, peak = 1e-9;
+    for (let i = 0; i < n; i++) {
+      const t = i / rate, attack = Math.min(1, t / 0.0008);
+      lp1 = (1 - a1) * (Math.random() * 2 - 1) * 1.7 + a1 * lp1;
+      lp2 = (1 - a2) * (Math.random() * 2 - 1) * 1.7 + a2 * lp2;
+      let s = lp1 * Math.exp(-t / 0.0025) * p.noise * 4
+            + lp2 * Math.exp(-t / 0.0007) * p.click * 2
+            + Math.sin(2 * Math.PI * bodyF * t + phase) * Math.exp(-t / tau) * attack * p.bodyAmt
+            + Math.sin(2 * Math.PI * bodyF * 1.62 * t) * Math.exp(-t / (tau * 0.5)) * attack * p.bodyAmt * 0.35
+            + Math.sin(2 * Math.PI * pingF * t) * Math.exp(-t / (tau * 0.4)) * attack * p.pingAmt;
+      if (!down) s *= 0.6;
+      s = Math.tanh(s * 1.6) / Math.tanh(1.6);
+      d[i] = s;
+      peak = Math.max(peak, Math.abs(s));
+    }
+    const fade = Math.floor(rate * 0.006);
+    for (let i = 0; i < fade; i++) d[n - fade + i] *= 1 - i / fade;
+    const gain = ((down ? 0.85 : 0.5) / peak) * 0.55;
+    for (let i = 0; i < n; i++) d[i] *= gain;
+    const src = ctx.createBufferSource();
+    src.buffer = buffer;
+    const pan = new StereoPannerNode(ctx, { pan: (u - 0.5) * 0.8 });
+    src.connect(pan).connect(ctx.destination);
+    src.start();
+  }
+
+  const pad = document.getElementById("pad");
+  pad.addEventListener("keydown", e => { if (!e.repeat && !e.metaKey) play(e.key, true); });
+  pad.addEventListener("keyup", e => { if (!e.metaKey) play(e.key, false); });
+
+  document.querySelectorAll(".sets button").forEach(button => {
+    button.addEventListener("click", () => {
+      kind = button.dataset.kind;
+      document.querySelectorAll(".sets button").forEach(b => b.setAttribute("aria-pressed", String(b === button)));
+      play("f", true);
+      setTimeout(() => play("f", false), 90);
+      pad.focus();
+    });
+  });
+</script>
+</body>
+</html>

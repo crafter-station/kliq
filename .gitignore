@@ -1,0 +1,9 @@
+.build/
+.swiftpm/
+build/
+*.xcodeproj
+*.dmg
+.vercel/
+.worktrees/
+.DS_Store
+__pycache__/
