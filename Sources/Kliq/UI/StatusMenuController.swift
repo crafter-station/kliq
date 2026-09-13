@@ -157,15 +157,7 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
             shownSetNames = names
             setItems.forEach(menu.removeItem)
             setItems = sets.map { set in
-                let item = NSMenuItem(title: set.creditedName, action: #selector(selectSet(_:)), keyEquivalent: "")
-                if let credit = set.credit {
-                    // The credit reads as quiet secondary text after the name.
-                    let font = NSFont.menuFont(ofSize: 0)
-                    let title = NSMutableAttributedString(string: set.displayName, attributes: [.font: font])
-                    title.append(NSAttributedString(string: " · \(credit)", attributes: [
-                        .font: font, .foregroundColor: NSColor.secondaryLabelColor]))
-                    item.attributedTitle = title
-                }
+                let item = NSMenuItem(title: set.displayName, action: #selector(selectSet(_:)), keyEquivalent: "")
                 item.target = self
                 item.representedObject = set.name
                 return item

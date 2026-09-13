@@ -427,7 +427,7 @@ struct SoundSetPicker: View {
                     get: { settings.selectedSetName },
                     set: { controller.selectSet(named: $0, preview: true) })) {
                     ForEach(state.availableSets) { set in
-                        Text(set.creditedName).tag(set.name)
+                        Text(set.displayName).tag(set.name)
                     }
                 }
                 .labelsHidden()

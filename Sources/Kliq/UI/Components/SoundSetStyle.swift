@@ -4,14 +4,4 @@ extension SoundSet {
     var displayName: String {
         isBuiltIn && name.hasPrefix("Synth ") ? String(name.dropFirst("Synth ".count)) : name
     }
-
-    /// Who designed the set, shown next to its name where sets are picked.
-    var credit: String? {
-        isBuiltIn && name.hasPrefix("Synth ") ? "by Cris" : nil
-    }
-
-    /// The name with its credit, such as "Thock · by Cris".
-    var creditedName: String {
-        credit.map { "\(displayName) · \($0)" } ?? displayName
-    }
 }
