@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="96 96 832 832" width="832" height="832">
+  <!-- Kliq's app icon: a hand-cut red keycap with a navy print offset and yellow
+       flecks on a cream tile, on the macOS icon grid (an 824 px tile on a 1024
+       canvas). Render it into Resources/AppIcon.icns with Tools/render_icon.sh. -->
+  <defs>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#000" flood-opacity=".26"/>
+    </filter>
+    <filter id="cut" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.011" numOctaves="2" seed="3" result="w"/>
+      <feDisplacementMap in="SourceGraphic" in2="w" scale="18" xChannelSelector="R" yChannelSelector="G" result="a"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.19" numOctaves="1" seed="5" result="b"/>
+      <feDisplacementMap in="a" in2="b" scale="7" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="cut2" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="2" seed="11" result="w"/>
+      <feDisplacementMap in="SourceGraphic" in2="w" scale="20" xChannelSelector="G" yChannelSelector="R" result="a"/>
+      <feTurbulence type="fractalNoise" baseFrequency="0.22" numOctaves="1" seed="2" result="b"/>
+      <feDisplacementMap in="a" in2="b" scale="6" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="fleck" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.005 0.03" numOctaves="3" seed="4" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  14 0 0 0 -8.4" result="m"/>
+      <feComposite in="SourceGraphic" in2="m" operator="in"/>
+    </filter>
+    <clipPath id="skirt">
+      <path d="M354,282H670A92,92 0 0 1 762,374V650A92,92 0 0 1 670,742H354A92,92 0 0 1 262,650V374A92,92 0 0 1 354,282Z"/>
+    </clipPath>
+  </defs>
+
+  <path d="M285,100H739A185,185 0 0 1 924,285V739A185,185 0 0 1 739,924H285A185,185 0 0 1 100,739V285A185,185 0 0 1 285,100Z" fill="#F1EEE7"/>
+  <path d="M285,100H739A185,185 0 0 1 924,285V739A185,185 0 0 1 739,924H285A185,185 0 0 1 100,739V285A185,185 0 0 1 285,100Z" fill="none" stroke="#000" stroke-opacity=".12" stroke-width="4"/>
+
+  <g transform="rotate(-6 512 512)">
+    <!-- Print offset, skirt, dry-brush flecks, face, legend. -->
+    <path d="M354,282H670A92,92 0 0 1 762,374V650A92,92 0 0 1 670,742H354A92,92 0 0 1 262,650V374A92,92 0 0 1 354,282Z" transform="translate(24 28)" fill="#253A5F" filter="url(#cut)"/>
+    <path d="M354,282H670A92,92 0 0 1 762,374V650A92,92 0 0 1 670,742H354A92,92 0 0 1 262,650V374A92,92 0 0 1 354,282Z" fill="#C23A31" filter="url(#cut)"/>
+    <rect x="262" y="282" width="500" height="460" fill="#F4B324" filter="url(#fleck)" clip-path="url(#skirt)"/>
+    <path d="M388,320H636A64,64 0 0 1 700,384V566A64,64 0 0 1 636,630H388A64,64 0 0 1 324,566V384A64,64 0 0 1 388,320Z" fill="#E1443A" filter="url(#cut2)"/>
+    <path d="M448.2 394V564M560.4 394L471.3 485L570.6 564" fill="none" stroke="#F3F1EC" stroke-width="42" stroke-linejoin="miter" filter="url(#cut2)"/>
+  </g>
+</svg>

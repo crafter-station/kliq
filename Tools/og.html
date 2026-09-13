@@ -1,0 +1,95 @@
+<!doctype html>
+<!-- Link preview image for kliq.crafter.run, 1200×630. Render with Tools/render_og.sh. -->
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@500;600&family=Geist+Mono:wght@500&display=swap">
+<style>
+  html, body { margin: 0; width: 1200px; height: 630px; overflow: hidden; background: #2B2B2B; }
+  #art { position: absolute; inset: 0; width: 1200px; height: 630px; }
+  .copy { position: absolute; left: 84px; top: 92px; width: 600px; color: #F4F4F2; font-family: "Geist", -apple-system, sans-serif; }
+  .brand { display: flex; align-items: center; gap: 14px; font-weight: 600; font-size: 34px; letter-spacing: -0.02em; }
+  .brand img { width: 76px; height: 76px; margin: -8px -4px -8px -8px; }
+  h1 { margin: 46px 0 0; font-weight: 600; font-size: 108px; line-height: .92; letter-spacing: -0.058em; }
+  p { margin: 28px 0 0; font-size: 30px; line-height: 1.3; color: #A6A6A2; letter-spacing: -0.012em; }
+  .url { position: absolute; left: 84px; bottom: 62px; font: 500 21px "Geist Mono", ui-monospace, monospace; color: #8A8A86; letter-spacing: .02em; }
+</style>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <!-- The site's hand-cut recipe, scaled for keycaps about twice the size. -->
+    <filter id="rough-0" x="-12%" y="-12%" width="124%" height="124%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="3" result="w"/><feDisplacementMap in="SourceGraphic" in2="w" scale="11" xChannelSelector="R" yChannelSelector="G" result="a"/><feTurbulence type="fractalNoise" baseFrequency="0.36" numOctaves="1" seed="5" result="b"/><feDisplacementMap in="a" in2="b" scale="4.5" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <filter id="rough-1" x="-12%" y="-12%" width="124%" height="124%"><feTurbulence type="fractalNoise" baseFrequency="0.018" numOctaves="2" seed="11" result="w"/><feDisplacementMap in="SourceGraphic" in2="w" scale="12" xChannelSelector="G" yChannelSelector="R" result="a"/><feTurbulence type="fractalNoise" baseFrequency="0.4" numOctaves="1" seed="2" result="b"/><feDisplacementMap in="a" in2="b" scale="4" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <filter id="rough-2" x="-12%" y="-12%" width="124%" height="124%"><feTurbulence type="fractalNoise" baseFrequency="0.024" numOctaves="2" seed="21" result="w"/><feDisplacementMap in="SourceGraphic" in2="w" scale="10" xChannelSelector="R" yChannelSelector="B" result="a"/><feTurbulence type="fractalNoise" baseFrequency="0.33" numOctaves="1" seed="9" result="b"/><feDisplacementMap in="a" in2="b" scale="5" xChannelSelector="G" yChannelSelector="R"/></filter>
+    <filter id="rough-3" x="-12%" y="-12%" width="124%" height="124%"><feTurbulence type="fractalNoise" baseFrequency="0.021" numOctaves="2" seed="34" result="w"/><feDisplacementMap in="SourceGraphic" in2="w" scale="11" xChannelSelector="B" yChannelSelector="G" result="a"/><feTurbulence type="fractalNoise" baseFrequency="0.38" numOctaves="1" seed="13" result="b"/><feDisplacementMap in="a" in2="b" scale="4.4" xChannelSelector="R" yChannelSelector="G"/></filter>
+    <filter id="fleck-0" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.009 0.055" numOctaves="3" seed="4" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  14 0 0 0 -8.3" result="m"/><feComposite in="SourceGraphic" in2="m" operator="in"/></filter>
+    <filter id="fleck-1" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.05 0.01" numOctaves="3" seed="17" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 14 0 0 -8.2" result="m"/><feComposite in="SourceGraphic" in2="m" operator="in"/></filter>
+    <filter id="fleck-2" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency="0.015 0.045" numOctaves="3" seed="29" result="n"/><feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 14 0 -8.4" result="m"/><feComposite in="SourceGraphic" in2="m" operator="in"/></filter>
+  </defs>
+</svg>
+
+<svg id="art" viewBox="0 0 1200 630" aria-hidden="true"></svg>
+<div class="copy">
+  <div class="brand"><img src="../site/icon.png" alt="">Kliq</div>
+  <h1>Every key,<br>heard.</h1>
+  <p>Mechanical keyboard sounds<br>for your Mac.</p>
+</div>
+<div class="url">kliq.crafter.run · free for macOS</div>
+
+<script>
+  const C = { red: "#E1443A", green: "#15904F", lavender: "#8B8DD2", yellow: "#F4B324", navy: "#253A5F",
+              clear: "#B8DFE6", ink: "#1B1B1B", bone: "#F3F1EC", chalk: "#D6D3CB" };
+  const CAP = {
+    red:    { skirt: "#C23A31", face: C.red, legend: C.bone },
+    green:  { skirt: "#0F7A42", face: C.green, legend: C.bone },
+    lav:    { skirt: "#7174BD", face: C.lavender, legend: C.ink },
+    yellow: { skirt: "#D99A12", face: C.yellow, legend: C.ink },
+  };
+  const rr = (x, y, w, h, r) =>
+    `M${x + r},${y}H${x + w - r}A${r},${r} 0 0 1 ${x + w},${y + r}V${y + h - r}A${r},${r} 0 0 1 ${x + w - r},${y + h}` +
+    `H${x + r}A${r},${r} 0 0 1 ${x},${y + h - r}V${y + r}A${r},${r} 0 0 1 ${x + r},${y}Z`;
+  const arc = (cx, cy, r, a0, a1) => {
+    const pt = a => [cx + r * Math.cos(a * Math.PI / 180), cy + r * Math.sin(a * Math.PI / 180)];
+    const [x0, y0] = pt(a0), [x1, y1] = pt(a1);
+    return `M${x0.toFixed(1)},${y0.toFixed(1)}A${r},${r} 0 0 1 ${x1.toFixed(1)},${y1.toFixed(1)}`;
+  };
+  const rough = s => ` filter="url(#rough-${s % 4})"`;
+  let uid = 0;
+
+  function keycap(o) {
+    const c = CAP[o.cap], seed = o.seed, r = Math.min(o.w, o.h) * 0.18;
+    const skirt = rr(o.x, o.y, o.w, o.h, r);
+    const fx = o.x + o.w * 0.13, fy = o.y + o.h * 0.08, fw = o.w * 0.74, fh = o.h * 0.64;
+    const id = "c" + uid++, size = fh * 0.36;
+    return `<g transform="rotate(${o.rot} ${o.x + o.w / 2} ${o.y + o.h / 2})">` +
+      `<path d="${skirt}" transform="translate(10 12)" fill="${o.shadow}"${rough(seed)}/>` +
+      `<path d="${skirt}" fill="${c.skirt}"${rough(seed)}/>` +
+      `<clipPath id="${id}"><path d="${skirt}"/></clipPath><rect x="${o.x}" y="${o.y}" width="${o.w}" height="${o.h}" fill="${o.fleck}" filter="url(#fleck-${seed % 3})" clip-path="url(#${id})"/>` +
+      `<path d="${rr(fx, fy, fw, fh, r * 0.7)}" fill="${c.face}"${rough(seed + 1)}/>` +
+      `<text x="${fx + fw * 0.13}" y="${fy + size * 1.15}" font-family="Geist Mono, ui-monospace, monospace" font-weight="500" font-size="${size}" fill="${c.legend}">${o.legend}</text></g>`;
+  }
+  function stem(cx, cy, s, color, crossShadow, shadow, rot, seed) {
+    const housing = rr(cx - s / 2, cy - s / 2, s, s, s * 0.2), arm = s * 0.17, len = s * 0.62;
+    const cross = rr(cx - len / 2, cy - arm / 2, len, arm, arm * 0.35) + " " + rr(cx - arm / 2, cy - len / 2, arm, len, arm * 0.35);
+    return `<g transform="rotate(${rot} ${cx} ${cy})"><path d="${housing}" transform="translate(9 11)" fill="${shadow}"${rough(seed)}/>` +
+      `<path d="${housing}" fill="${C.ink}"${rough(seed)}/><path d="${cross}" transform="translate(5 7)" fill="${crossShadow}"${rough(seed + 1)}/>` +
+      `<path d="${cross}" fill="${color}"${rough(seed + 2)}/></g>`;
+  }
+  function coil(x, y, len, loops, r, color, seed, width) {
+    const pts = [], n = loops * 30;
+    for (let i = 0; i <= n; i++) {
+      const t = i / n, a = t * loops * Math.PI * 2;
+      pts.push(`${(x + t * len - r * Math.sin(a)).toFixed(1)},${(y - r * Math.cos(a) * 0.9).toFixed(1)}`);
+    }
+    return `<path d="M${pts.join("L")}" fill="none" stroke="${color}" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"${rough(seed)}/>`;
+  }
+  const ripple = (cx, cy, color, seed) => `<g fill="none" stroke="${color}" stroke-width="12" stroke-linecap="round">` +
+    [44, 70, 96].map((r, i) => `<path d="${arc(cx, cy, r, -32, 32)}"${rough(seed + i)} opacity="${1 - i * 0.25}"/>`).join("") + `</g>`;
+
+  // K L / I Q, staggered like two rows of a keyboard, running off the right and bottom edges.
+  document.getElementById("art").innerHTML =
+    stem(1150, 36, 150, C.red, C.yellow, C.lavender, 12, 7) +
+    coil(640, 612, 620, 12, 30, C.clear, 5, 11) +
+    keycap({ x: 700, y: 112, w: 214, h: 198, cap: "red", legend: "K", shadow: C.yellow, fleck: C.yellow, rot: -9, seed: 1 }) +
+    keycap({ x: 928, y: 70, w: 214, h: 198, cap: "green", legend: "L", shadow: C.lavender, fleck: C.yellow, rot: 7, seed: 2 }) +
+    keycap({ x: 760, y: 338, w: 214, h: 198, cap: "lav", legend: "I", shadow: C.navy, fleck: C.clear, rot: 5, seed: 3 }) +
+    keycap({ x: 990, y: 316, w: 214, h: 198, cap: "yellow", legend: "Q", shadow: C.red, fleck: C.red, rot: -6, seed: 4 });
+</script>
