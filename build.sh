@@ -45,20 +45,9 @@ cp -R Resources/Sounds "$APP/Contents/Resources/Sounds"
 [ -n "${VERSION:-}" ] && /usr/libexec/PlistBuddy -c "Set :CFBundleShortVersionString $VERSION" "$APP/Contents/Info.plist"
 [ -n "${BUILD_NUMBER:-}" ] && /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" "$APP/Contents/Info.plist"
 
-MARK=Sources/Kliq/UI/Components/KliqLogo.swift
-ICNS="$BUILD_DIR/AppIcon.icns"
-if [ ! -f "$ICNS" ] || [ "$MARK" -nt "$ICNS" ] || [ Tools/make_icon.swift -nt "$ICNS" ]; then
-  echo "▸ rendering app icon"
-  rm -rf "$BUILD_DIR/AppIcon.iconset"
-  if swiftc -parse-as-library -O -o "$BUILD_DIR/make_icon" Tools/make_icon.swift "$MARK" 2>/dev/null \
-     && "$BUILD_DIR/make_icon" "$BUILD_DIR/AppIcon.iconset" >/dev/null \
-     && iconutil -c icns "$BUILD_DIR/AppIcon.iconset" -o "$ICNS" 2>/dev/null; then
-    :
-  else
-    echo "  (icon rendering skipped)"
-  fi
-fi
-[ -f "$BUILD_DIR/AppIcon.icns" ] && cp "$BUILD_DIR/AppIcon.icns" "$APP/Contents/Resources/AppIcon.icns"
+# The icon is drawn in Resources/AppIcon.svg and rendered by Tools/render_icon.sh;
+# the rendered .icns is committed, so building needs no browser.
+cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
 
 # Hardened runtime on every build so local builds behave like notarized ones.
 # A secure timestamp is only needed (and only fetched) for Developer ID builds.

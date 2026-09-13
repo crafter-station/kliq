@@ -41,30 +41,22 @@ private extension NSColor {
     }
 }
 
-/// Kliq's logo as the app icon shows it: the white keycap mark from KliqLogo on a black
-/// tile, in the icon's proportions. Every view that shows the logo goes through this one.
+/// Kliq's app icon, for the welcome screen, About and the status card. Every view that
+/// shows the logo goes through this one.
 struct BrandMark: View {
     var size: CGFloat
 
     var body: some View {
-        let s = size
-        let tile = RoundedRectangle(cornerRadius: s * 0.225, style: .continuous)
-        tile.fill(LinearGradient(colors: [Color(hex: 0x1F1F1F), Color(hex: 0x000000)],
-                                 startPoint: .top, endPoint: .bottom))
-            .overlay {
-                // The icon insets the mark by 18.5% of the tile on each side.
-                Image(nsImage: Self.mark(size: s * 0.63))
-            }
-            .frame(width: s, height: s)
-            // Keeps the black tile's edge visible on dark backgrounds.
-            .overlay(tile.strokeBorder(Color.white.opacity(0.14), lineWidth: 0.5))
+        // The icon art sits on the macOS grid, an 824 pt tile on a 1024 pt canvas, so
+        // draw the canvas larger than the frame to make the tile itself `size` wide.
+        Image(nsImage: Self.icon)
+            .resizable()
+            .interpolation(.high)
+            .frame(width: size * 1024 / 824, height: size * 1024 / 824)
+            .frame(width: size, height: size)
             .accessibilityHidden(true)
     }
 
-    private static func mark(size: CGFloat) -> NSImage {
-        NSImage(size: NSSize(width: size, height: size), flipped: false) { rect in
-            KliqLogo.draw(in: rect, color: .white)
-            return true
-        }
-    }
+    /// The bundled AppIcon; unbundled debug runs fall back to the drawn mark.
+    private static let icon: NSImage = NSImage(named: "AppIcon") ?? KliqLogo.appIcon(size: 512)
 }

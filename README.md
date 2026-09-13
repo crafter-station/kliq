@@ -67,7 +67,7 @@ open build/Kliq.app
 ```
 
 Requires macOS 15 and Xcode 26 (or a matching Swift toolchain). The script compiles
-with `swift build`, assembles `build/Kliq.app`, renders the icon, and signs it with
+with `swift build`, assembles `build/Kliq.app`, and signs it with
 the hardened runtime. Regenerating the synthesized sounds needs `python3` with
 `numpy` and `scipy` (encoding uses macOS's built-in `afconvert`).
 
@@ -117,8 +117,8 @@ Sources/Kliq/
   Stats/    StatsManager
   UI/       StatusMenuController and MenuBar/ (menu bar menu), Settings/ (settings
             window), OnboardingView, Components/ (KliqLogo, set badges, keycaps)
-Tools/      gen_sounds.py, make_icon.swift (renders KliqLogo), diagnose_triggers.swift
-Resources/  Info.plist, Kliq.entitlements, Sounds/
+Tools/      gen_sounds.py, make_web_sounds.py, render_icon.sh, diagnose_triggers.swift
+Resources/  Info.plist, Kliq.entitlements, AppIcon.svg + AppIcon.icns, Sounds/
 site/       kliq.crafter.run, a static page deployed on Vercel
 ```
 
