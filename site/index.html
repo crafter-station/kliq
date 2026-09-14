@@ -58,55 +58,54 @@
   .navlinks a.solid { color: var(--text); background: var(--raised); }
 
   /* Stage: the card floats in the middle, hand-cut keys spill in from the edges. */
-  .stage { position: relative; max-width: 1080px; margin: 0 auto; padding-block: 20px 48px; }
+  .stage { position: relative; max-width: 1080px; margin: 0 auto; padding-block: 36px 112px; }
   .decor { position: absolute; pointer-events: none; z-index: 0; }
   .decor svg { display: block; width: 100%; height: auto; overflow: visible; }
-  .decor.left { left: -150px; top: -30px; width: 400px; }
-  .decor.right { right: -150px; bottom: -10px; width: 420px; }
-  @media (max-width: 1100px) { .decor.left { left: -230px; } .decor.right { right: -240px; } }
-  @media (max-width: 720px) { .decor { display: none; } }
+  .decor.left { left: -150px; top: 10px; width: 300px; }
+  .decor.right { right: -150px; top: 60px; width: 300px; }
+  @media (max-width: 1180px) { .decor { display: none; } }
 
-  .hero { position: relative; z-index: 1; max-width: 740px; margin: 0 auto; background: var(--card); border-radius: 30px; padding: 10px; display: grid; gap: 10px; box-shadow: 0 50px 90px -40px rgba(0, 0, 0, .6); }
+  .hero { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; background: var(--card); border-radius: 30px; padding: 10px; display: grid; gap: 10px; box-shadow: 0 50px 90px -40px rgba(0, 0, 0, .6); }
   .tile { position: relative; border-radius: 21px; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-  .tile .copy { position: relative; z-index: 1; padding: 20px 22px 16px; display: grid; align-content: space-between; gap: 12px; }
+  .tile .copy { position: relative; z-index: 1; padding: 26px 28px 20px; display: grid; align-content: space-between; gap: 18px; }
   .tile .art { position: relative; min-height: 100%; }
   /* The art fills only its own column, anchored bottom-right; tiles bleed off that corner. */
   .tile .art svg { position: absolute; inset: 0; width: 100%; height: 100%; }
   .tile.red { background: var(--red); }
   .tile.navy { background: var(--navy); min-height: 122px; }
-  .mark-line { display: flex; align-items: center; gap: 10px; font: 500 12px var(--mono); letter-spacing: .04em; color: rgba(255, 255, 255, .78); }
-  h1 { margin: 0; font-weight: 600; font-size: clamp(28px, 4.6vw, 40px); line-height: .98; letter-spacing: -0.05em; text-wrap: balance; }
-  .tile p { margin: 6px 0 0; font-size: 15.5px; line-height: 1.4; max-width: 25ch; }
-  .tile.red p { color: rgba(255, 255, 255, .86); }
-  .tile.navy h2 { margin: 0; font-size: 22px; line-height: 1.1; font-weight: 600; letter-spacing: -0.035em; }
-  .tile.navy p { color: rgba(214, 230, 245, .74); font-size: 15px; }
+  .mark-line { font: 500 11.5px var(--mono); letter-spacing: .08em; color: rgba(255, 255, 255, .72); }
+  h1 { margin: 0; font-weight: 600; font-size: clamp(34px, 6vw, 54px); line-height: .95; letter-spacing: -0.05em; text-wrap: balance; }
+  .tile p { margin: 12px 0 0; font-size: 16px; line-height: 1.45; max-width: 28ch; text-wrap: pretty; }
+  .tile.red p { color: rgba(255, 255, 255, .88); }
+  .tile.navy h2 { margin: 0; font-size: 20px; line-height: 1.1; font-weight: 600; letter-spacing: -0.03em; }
+  .tile.navy p { color: rgba(214, 230, 245, .72); font-size: 15px; margin-top: 6px; max-width: 34ch; }
   .cta { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-  .btn { display: inline-flex; align-items: center; gap: 8px; font: 500 14px var(--sans); text-decoration: none; padding: 9px 14px; border-radius: 11px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; font: 500 15px var(--sans); text-decoration: none; padding: 11px 18px; border-radius: 12px; }
   .btn.light { background: #FFFFFF; color: #1E1E1E; }
   .btn.light:hover { background: #F1EFEA; }
-  .meta { font: 500 12px var(--mono); color: rgba(255, 255, 255, .78); letter-spacing: .02em; }
+  .meta { font: 500 12px var(--mono); color: rgba(255, 255, 255, .72); letter-spacing: .02em; }
 
   /* Try it: a big input, like a message box, that plays the real switches — part of the hero, not a scroll away. */
-  .tile.red .try { grid-column: 1 / -1; min-width: 0; padding: 2px 22px 18px; display: grid; gap: 8px; }
-  .box { background: var(--inner); border: 1px solid var(--line); border-radius: 18px; padding: 10px 14px 8px; display: grid; gap: 6px; transition: border-color .15s; }
+  .tile.red .try { grid-column: 1 / -1; min-width: 0; padding: 0 12px 12px; }
+  .box { background: var(--inner); border: 1px solid transparent; border-radius: 16px; padding: 8px 8px 6px; display: grid; gap: 4px; transition: border-color .15s; }
   .box:focus-within { border-color: #4B4B4A; }
-  .box textarea { width: 100%; min-height: 60px; resize: none; background: transparent; border: 0; outline: 0; color: var(--text); caret-color: var(--text); font: 18px/1.4 var(--sans); letter-spacing: -0.01em; padding: 2px 4px 0; }
-  .box textarea::placeholder { color: #8E8E8B; }
+  .box textarea { width: 100%; min-height: 56px; resize: none; background: transparent; border: 0; outline: 0; color: var(--text); caret-color: var(--text); font: 18px/1.4 var(--sans); letter-spacing: -0.01em; padding: 4px 8px 0; }
+  .box textarea::placeholder { color: #85857F; }
   .box textarea:focus-visible { outline: 0; }
   .bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-  .live-label { font: 500 13px var(--mono); color: var(--muted); }
-  .soundboard { display: flex; gap: 5px; flex-wrap: wrap; min-width: 0; }
-  .sound-key { font: 500 12.5px var(--mono); color: var(--muted); background: var(--raised); border: 0; border-radius: 10px; padding: 7px 11px; cursor: pointer; }
-  .sound-key:hover { color: var(--text); }
+  .soundboard { display: flex; gap: 2px; flex-wrap: wrap; min-width: 0; }
+  .sound-key { font: 500 12px var(--mono); color: var(--faint); background: transparent; border: 0; border-radius: 8px; padding: 6px 9px; cursor: pointer; transition: color .12s, background-color .12s; }
+  .sound-key:hover { color: var(--text); background: var(--raised); }
   .sound-key[aria-pressed="true"] { color: #1E1E1E; background: var(--text); }
-  .round { flex: none; width: 38px; height: 38px; border-radius: 50%; border: 0; background: #6A6A68; color: #1E1E1E; display: grid; place-items: center; cursor: pointer; }
-  .round[aria-pressed="false"] { background: var(--raised); color: var(--muted); }
-  .round svg { width: 17px; height: 17px; }
+  .round { flex: none; width: 30px; height: 30px; border-radius: 8px; border: 0; background: transparent; color: var(--muted); display: grid; place-items: center; cursor: pointer; }
+  .round:hover { color: var(--text); background: var(--raised); }
+  .round[aria-pressed="false"] { color: var(--faint); }
+  .round svg { width: 16px; height: 16px; }
 
-  /* Features */
+  /* Features: quiet grey wells, so the red hero stays the one loud thing. */
   .features { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; position: relative; z-index: 1; }
   .feature { background: var(--card); border-radius: 24px; padding: 8px; display: grid; grid-template-rows: auto 1fr; gap: 2px; }
-  .feature .well { border-radius: 17px; overflow: hidden; }
+  .feature .well { border-radius: 17px; overflow: hidden; background: var(--inner); }
   .feature .well svg { display: block; width: 100%; height: auto; }
   .feature .txt { padding: 12px 12px 14px; }
   .feature h3 { margin: 0 0 4px; font-size: 17px; font-weight: 600; letter-spacing: -0.02em; }
@@ -115,7 +114,7 @@
   @media (max-width: 960px) { .features { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
   @media (max-width: 540px) { .features { grid-template-columns: 1fr; } }
 
-  .signature { max-width: 1000px; margin: 80px auto 0; }
+  .signature { max-width: 560px; margin: 120px auto 0; }
   .signature svg { display: block; width: 100%; height: auto; overflow: visible; }
   .signature .key { cursor: pointer; }
 
@@ -131,6 +130,8 @@
   @media (prefers-reduced-motion: reduce) { .key, .box { transition: none; } }
 
   @media (max-width: 640px) {
+    .stage { padding-block: 20px 56px; }
+    .signature { margin-top: 72px; }
     .tile { grid-template-columns: 1fr; }
     .tile .art { height: 190px; }
     .tile.navy .art { height: 130px; }
@@ -169,13 +170,13 @@
 
 <main>
   <div class="stage">
-    <div class="decor left" aria-hidden="true"><svg id="decor-left" viewBox="0 0 400 660"></svg></div>
-    <div class="decor right" aria-hidden="true"><svg id="decor-right" viewBox="0 0 420 580"></svg></div>
+    <div class="decor left" aria-hidden="true"><svg id="decor-left" viewBox="0 0 300 520"></svg></div>
+    <div class="decor right" aria-hidden="true"><svg id="decor-right" viewBox="0 0 300 520"></svg></div>
 
     <section class="hero" aria-label="Kliq">
       <div class="tile red">
         <div class="copy">
-          <div class="mark-line"><img class="mark" src="/icon.png" width="38" height="38" alt="">FOR MAC · FREE AND OPEN SOURCE</div>
+          <div class="mark-line">FOR MAC · FREE AND OPEN SOURCE</div>
           <div>
             <h1>Every key, heard.</h1>
             <p>Mechanical keyboard sounds for every keystroke and click, from your menu bar.</p>
@@ -188,18 +189,17 @@
         <div class="art"><svg id="art-hero" viewBox="0 0 400 300" preserveAspectRatio="xMaxYMax meet" role="img" aria-label="Hand-cut keycaps and a switch stem on colored tiles"></svg></div>
 
         <div class="try">
-          <div class="soundboard" role="group" aria-label="Sound profile">
-            <button type="button" class="sound-key" data-set="kat" aria-pressed="false">KAT</button>
-            <button type="button" class="sound-key" data-set="cherry" aria-pressed="true">Cherry</button>
-            <button type="button" class="sound-key" data-set="mt3" aria-pressed="false">MT3</button>
-            <button type="button" class="sound-key" data-set="xda" aria-pressed="false">XDA</button>
-            <button type="button" class="sound-key" data-set="oem" aria-pressed="false">OEM</button>
-            <button type="button" class="sound-key" data-set="sa" aria-pressed="false">SA</button>
-            <button type="button" class="sound-key" data-set="dsa" aria-pressed="false">DSA</button>
-          </div>
           <div class="box">
             <div class="bar">
-              <span class="live-label"><span id="live-profile">Cherry</span> · live keyboard</span>
+              <div class="soundboard" role="group" aria-label="Sound profile">
+                <button type="button" class="sound-key" data-set="cherry" aria-pressed="true">Cherry</button>
+                <button type="button" class="sound-key" data-set="kat" aria-pressed="false">KAT</button>
+                <button type="button" class="sound-key" data-set="mt3" aria-pressed="false">MT3</button>
+                <button type="button" class="sound-key" data-set="xda" aria-pressed="false">XDA</button>
+                <button type="button" class="sound-key" data-set="oem" aria-pressed="false">OEM</button>
+                <button type="button" class="sound-key" data-set="sa" aria-pressed="false">SA</button>
+                <button type="button" class="sound-key" data-set="dsa" aria-pressed="false">DSA</button>
+              </div>
               <button type="button" class="round" id="sound" aria-pressed="true" aria-label="Sound on">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor"/><path id="wave" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
               </button>
@@ -246,7 +246,7 @@
 <script>
 (() => {
   const C = { red: "#E1443A", green: "#15904F", lavender: "#8B8DD2", yellow: "#F4B324", navy: "#253A5F",
-              clear: "#B8DFE6", ink: "#1B1B1B", bone: "#F3F1EC", chalk: "#D6D3CB" };
+              clear: "#B8DFE6", ink: "#1B1B1B", bone: "#F3F1EC", chalk: "#D6D3CB", card: "#212121" };
   const CAP = {
     bone:   { skirt: C.chalk, face: C.bone, legend: C.ink },
     red:    { skirt: "#C23A31", face: C.red, legend: C.bone },
@@ -346,32 +346,33 @@
     tile(236, 30, 140, 140, C.navy,
       keycap({ x: 262, y: 58, w: 88, h: 82, cap: "yellow", legend: "Q", letter: "Q", shadow: C.clear, fleck: C.red, seed: 3, press: true })) +
     tile(306, 158, 140, 170, C.clear,
-      coil(300, 290, 150, 5, 20, C.red, 4) + keycap({ x: 326, y: 184, w: 70, h: 64, cap: "red", legend: "L", letter: "L", shadow: C.navy, fleck: C.yellow, seed: 5, press: true })));
+      keycap({ x: 326, y: 184, w: 70, h: 64, cap: "red", legend: "L", letter: "L", shadow: C.navy, fleck: C.yellow, seed: 5, press: true })));
 
   set("art-quiet",
     mic(118, 20, C.clear, C.navy, 1) +
     keycap({ x: 198, y: 58, w: 66, h: 62, cap: "bone", legend: "zz", shadow: C.lavender, seed: 2 }) +
-    ripple(280, 89, C.clear, 0.3, 3) +
-    coil(150, 168, 260, 10, 14, C.yellow, 5, 6));
+    ripple(280, 89, C.clear, 0.3, 3));
 
-  set("art-switches", `<rect width="320" height="150" fill="${C.lavender}"/>` +
-    stem({ cx: 80, cy: 75, s: 68, color: C.red, crossShadow: C.yellow, shadow: C.navy, seed: 1 }) +
-    stem({ cx: 160, cy: 75, s: 68, color: C.yellow, crossShadow: C.red, shadow: C.navy, seed: 2 }) +
-    stem({ cx: 240, cy: 75, s: 68, color: C.clear, crossShadow: C.green, shadow: C.navy, seed: 3 }));
+  // Feature art sits on the card's grey well; one accent color per card, no colored backgrounds.
+  const hush = "#5C5C59";
+  set("art-switches",
+    stem({ cx: 80, cy: 75, s: 68, color: C.red, crossShadow: C.yellow, shadow: C.card, seed: 1 }) +
+    stem({ cx: 160, cy: 75, s: 68, color: C.yellow, crossShadow: C.red, shadow: C.card, seed: 2 }) +
+    stem({ cx: 240, cy: 75, s: 68, color: C.clear, crossShadow: C.green, shadow: C.card, seed: 3 }));
 
-  set("art-tune", `<rect width="320" height="150" fill="${C.clear}"/>` +
-    keycap({ x: 58, y: 44, w: 66, h: 62, cap: "bone", legend: "−", shadow: C.navy, seed: 1 }) +
-    keycap({ x: 136, y: 44, w: 66, h: 62, cap: "yellow", legend: "+", shadow: C.navy, fleck: C.red, seed: 2 }) +
-    ripple(214, 75, C.navy, 1, 3));
+  set("art-tune",
+    keycap({ x: 58, y: 44, w: 66, h: 62, cap: "bone", legend: "−", shadow: C.card, seed: 1 }) +
+    keycap({ x: 136, y: 44, w: 66, h: 62, cap: "yellow", legend: "+", shadow: C.card, fleck: C.red, seed: 2 }) +
+    ripple(214, 75, hush, 1, 3));
 
-  set("art-shortcut", `<rect width="320" height="150" fill="${C.green}"/>` +
-    keycap({ x: 50, y: 44, w: 62, h: 60, cap: "bone", legend: "⌃", shadow: C.yellow, seed: 1 }) +
-    keycap({ x: 124, y: 44, w: 62, h: 60, cap: "bone", legend: "⌥", shadow: C.yellow, seed: 2 }) +
-    keycap({ x: 198, y: 44, w: 62, h: 60, cap: "red", legend: "K", letter: "K", shadow: C.yellow, fleck: C.yellow, seed: 3 }));
+  set("art-shortcut",
+    keycap({ x: 50, y: 44, w: 62, h: 60, cap: "bone", legend: "⌃", shadow: C.card, seed: 1 }) +
+    keycap({ x: 124, y: 44, w: 62, h: 60, cap: "bone", legend: "⌥", shadow: C.card, seed: 2 }) +
+    keycap({ x: 198, y: 44, w: 62, h: 60, cap: "red", legend: "K", letter: "K", shadow: C.card, fleck: C.yellow, seed: 3 }));
 
-  set("art-private", `<rect width="320" height="150" fill="${C.yellow}"/>` +
-    keycap({ x: 70, y: 44, w: 66, h: 62, cap: "navy", legend: "A", letter: "A", shadow: C.red, seed: 1 }) +
-    ripple(148, 75, C.navy, 1, 2) +
+  set("art-private",
+    keycap({ x: 70, y: 44, w: 66, h: 62, cap: "navy", legend: "A", letter: "A", shadow: C.card, seed: 1 }) +
+    ripple(148, 75, hush, 1, 2) +
     `<g fill="none" stroke="${C.red}" stroke-width="7" stroke-linecap="round"${rough(3)}><circle cx="252" cy="75" r="26"/><path d="M234 57L270 93"/></g>`);
 
   // The signature row: CRAFTER in keycaps, staggered like a real row of keys.
@@ -383,21 +384,15 @@
     rot: [-6, 4, -3, 6, -5, 3, -4][i], seed: 20 + i,
   })).join(""));
 
+  // A few loose keys in the margins, well clear of the card: a hint of play, not a crowd.
   set("decor-left",
-    keycap({ x: 40, y: 30, w: 130, h: 118, cap: "green", legend: "W", letter: "W", shadow: C.lavender, fleck: C.yellow, rot: -12, seed: 1 }) +
-    keycap({ x: 200, y: 120, w: 112, h: 102, cap: "red", legend: "E", letter: "E", shadow: C.yellow, fleck: C.yellow, rot: 10, seed: 2 }) +
-    keycap({ x: 50, y: 250, w: 134, h: 122, cap: "lav", shadow: C.navy, fleck: C.clear, rot: 6, seed: 3 }) +
-    stem({ cx: 290, cy: 350, s: 92, color: C.clear, crossShadow: C.red, shadow: C.yellow, rot: -8, seed: 4 }) +
-    coil(40, 470, 300, 8, 26, C.yellow, 5) +
-    keycap({ x: 170, y: 520, w: 104, h: 96, cap: "yellow", legend: "R", letter: "R", shadow: C.red, fleck: C.red, rot: -8, seed: 6 }));
+    keycap({ x: 70, y: 30, w: 116, h: 106, cap: "green", legend: "W", letter: "W", shadow: C.card, fleck: C.yellow, rot: -12, seed: 1 }) +
+    keycap({ x: 120, y: 380, w: 96, h: 88, cap: "yellow", legend: "R", letter: "R", shadow: C.card, fleck: C.red, rot: -8, seed: 6 }));
 
   set("decor-right",
-    keycap({ x: 190, y: 30, w: 150, h: 134, cap: "green", legend: "Y", letter: "Y", shadow: C.yellow, fleck: C.yellow, rot: 14, seed: 1 }) +
-    stem({ cx: 120, cy: 210, s: 96, color: C.red, crossShadow: C.yellow, shadow: C.lavender, rot: 10, seed: 2 }) +
-    keycap({ x: 230, y: 240, w: 126, h: 116, cap: "lav", legend: "U", letter: "U", shadow: C.red, fleck: C.clear, rot: -10, seed: 3 }) +
-    keycap({ x: 110, y: 380, w: 108, h: 98, cap: "red", shadow: C.lavender, fleck: C.yellow, rot: 8, seed: 4 }) +
-    ripple(236, 428, C.yellow, 1, 5, [30, 48, 66]) +
-    coil(40, 548, 340, 10, 18, C.clear, 6));
+    keycap({ x: 110, y: 10, w: 120, h: 108, cap: "lav", legend: "U", letter: "U", shadow: C.card, fleck: C.clear, rot: 12, seed: 3 }) +
+    keycap({ x: 70, y: 330, w: 98, h: 90, cap: "red", legend: "Y", letter: "Y", shadow: C.card, fleck: C.yellow, rot: -9, seed: 4 }) +
+    ripple(190, 375, C.yellow, 0.55, 5, [22, 36, 50]));
 
   // Sound: the app's own samples, one sprite per set, loaded on first use.
   const pad = document.getElementById("pad");
@@ -476,7 +471,6 @@
     current = button.dataset.set;
     document.querySelectorAll(".sound-key").forEach(b => b.setAttribute("aria-pressed", String(b === button)));
     pad.placeholder = `Type here to hear ${button.textContent}…`;
-    document.getElementById("live-profile").textContent = button.textContent;
     // A short "kliq" so the choice is heard right away.
     const word = ["k", "l", "i", "q"];
     for (const [i, k] of word.entries()) {
