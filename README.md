@@ -1,3 +1,5 @@
+![Kliq](site/og.png)
+
 # Kliq
 
 Mechanical keyboard sounds for every keystroke and click, as a macOS menu bar app.
@@ -64,6 +66,9 @@ mouse and Return effects, are WAV files. These are the complete product sound li
 ./build.sh
 open build/Kliq.app
 ```
+
+Or `make build` / `make run`. `make help` lists every shortcut (build, release,
+web-sounds, icon, og, diagnose, clean) wrapping the scripts below.
 
 Requires macOS 15 and Xcode 26 (or a matching Swift toolchain). The script compiles
 with `swift build`, assembles `build/Kliq.app`, and signs it with the hardened runtime.
