@@ -11,15 +11,19 @@ enum KliqApp {
         delegate = appDelegate
         app.delegate = appDelegate
         app.setActivationPolicy(.accessory)
-        app.mainMenu = makeMainMenu()
+        app.mainMenu = makeMainMenu(target: appDelegate)
         app.run()
     }
 
     /// Never shown as a menu bar for an accessory app, but it still routes ⌘Q, ⌘W and the
     /// editing shortcuts while one of Kliq's windows is key.
     @MainActor
-    private static func makeMainMenu() -> NSMenu {
+    private static func makeMainMenu(target: AppDelegate) -> NSMenu {
         let appMenu = NSMenu(title: "Kliq")
+        let settings = appMenu.addItem(withTitle: "Settings…", action: #selector(AppDelegate.showSettings(_:)),
+                                       keyEquivalent: ",")
+        settings.target = target
+        appMenu.addItem(.separator())
         appMenu.addItem(withTitle: "Quit Kliq", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
 
         let editMenu = NSMenu(title: "Edit")
@@ -44,6 +48,7 @@ enum KliqApp {
     }
 }
 
+@MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private var controller: AppController?
 
@@ -69,5 +74,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
         controller?.showSettings()
         return true
+    }
+
+    @objc func showSettings(_ sender: Any?) {
+        controller?.showSettings()
     }
 }

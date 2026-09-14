@@ -29,15 +29,9 @@ if [ -z "${CODESIGN_IDENTITY:-}" ]; then
 fi
 [ -n "$CODESIGN_IDENTITY" ] || { echo "no Developer ID Application identity in the keychain" >&2; exit 1; }
 
-# What ships must be exactly what is public in the repo: synthesized sets only,
-# no uncommitted or ignored files.
+# What ships must be exactly what is public in the repo, with no uncommitted or
+# ignored sound assets.
 ls -d Resources/Sounds/*/ >/dev/null 2>&1 || { echo "no bundled sound sets in Resources/Sounds" >&2; exit 1; }
-for dir in Resources/Sounds/*/; do
-  case "$(basename "$dir")" in
-    "Synth "*) ;;
-    *) echo "refusing to ship non-synthesized sound set: $dir" >&2; exit 1 ;;
-  esac
-done
 if [ -n "$(git status --porcelain --ignored -- Resources)" ]; then
   echo "Resources/ has uncommitted or ignored files; commit or remove them first:" >&2
   git status --short --ignored -- Resources >&2

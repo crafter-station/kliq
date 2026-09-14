@@ -32,11 +32,18 @@ event timing and which optional events happen, plus small jitter in band gains,
 centre frequencies and decays. On top of that each set has gentle level, tone
 and decay trends across the rows and columns of the board.
 
-Levels are absolute, not normalized per file, so the balance between keys and
-between down and up strokes is part of each profile. A gentle soft limiter
-keeps the rare loud peak below full scale, so nothing clips. No sine
-oscillators are used for key sounds; the narrowest bands are a third of an
-octave wide and damped.
+Every event starts with a click: the impulse responses of its bands from 500 Hz
+up, all starting together, so the attack is a phase-aligned hit rather than a
+swell of noise. From 800 Hz up, part of each band rings as two partials at
+random pitches inside it, under the band's own damped envelope, so every key has
+its own resonances; nothing rings freely. Some strokes add a few small rattle
+clicks after the main impact, lead-ins can be a few soft ticks rather than a
+hiss, and a few narrow partials from 4 kHz up can ring on after the hit, like a
+spring. Presses are levelled to one loudness per set, with
+a little jitter, so keys differ in timbre rather than volume; releases keep their
+profile's level, raised by the set's up_gain. A key sound starts on its hit and
+ends once it has faded 48 dB, and a gentle soft limiter keeps the rare loud peak
+below full scale.
 
 Files are mono Apple Lossless (48 kHz, 16-bit) in a CAF container. The app
 duplicates mono to both channels and pans each key itself, so stereo files would
@@ -77,10 +84,13 @@ MODIFIERS = {15, 58, 29, 56, 3640, 3675, 3676, 3613}
 GRID = 1000 * 2.0 ** (np.arange(-10, 13) / 3)     # 23 band centres, 100 Hz - 16 kHz
 WIDTH = 1 / 3                                     # band width, octaves
 DECAY_AT = np.array([125, 500, 2000, 8000, 16000.0])
-START_MS = 1.0                                    # silence before the first event
+START_MS = 0.2                                    # lead before the first event: files start on the hit
 CENTRE = (0.5, 2.5)                               # trends are relative to mid-board
 BAND_JITTER = (1.5, 0.03, 0.1)                    # per band: gain sd dB, pitch, decay
 SILENT = -60                                      # bands at or below this gain are left out
+TONAL_FROM = 800                                  # Hz; bands from here up partly ring as partials
+CLICK_FROM = 500                                  # Hz; bands from here up get a click (lower ones would boom)
+TRIM_BELOW = 55                                   # a key sound ends once it has faded this many dB
 
 
 def E(at, spread, chance, attack, gains, decays):
@@ -104,6 +114,13 @@ def E(at, spread, chance, attack, gains, decays):
 #   trend   (level dB, tone semitones, decay octaves) per board width and per row,
 #           as (level_col, level_row, tone_col, tone_row, decay_col, decay_row)
 #   jitter  per-key (level sd dB, tone sd semitones, decay sd octaves)
+# and a body: click (dB of each event's click over its bands, presses and releases), tonal
+# (share of each band from TONAL_FROM up that rings as partials), lowcap (longest decay below
+# 500 Hz, ms, or None), hf_decay (scale of decays from 6 kHz up), rattle (mean extra clicks
+# per press and per release), lead (dB on the lead-in's noise, mean ticks in the lead-in),
+# ping (partials per stroke from 4 kHz up, their dB under their band, decay ms), up_gain
+# (dB added to releases), press_rms and press_sd (dBFS over a press's first 30 ms, and its
+# jitter in dB) and decay (scale of all decays, presses and releases).
 KINDS = {
     "Synth Butter": dict(
         norm=dict(
@@ -215,11 +232,13 @@ KINDS = {
                 ]),
         ),
         trend=dict(down=(0.07, -0.18, -0.15, -0.05, -0.4, 0.083), up=(7.04, 1.56, 1.74, -0.35, -0.4, -0.069)),
-        jitter=dict(down=(0.37, 0.5, 0.124), up=(2.98, 0.74, 0.238)),
+        jitter=dict(down=(0.37, 1.0, 0.124), up=(2.98, 1.0, 0.238)),
+        body=dict(click=(0, 12), tonal=0.3, lowcap=12, hf_decay=1.5, rattle=(0, 0), lead=(0, 0), ping=(0, 0, 0),
+                  up_gain=0.0, press_rms=-23.0, press_sd=0.5, decay=(1.0, 1.0)),
     ),
     "Synth Glass": dict(
         norm=dict(
-            down=dict(level=-22.63, length=65, delay=(0.98, 16.24, 2.53),
+            down=dict(level=-22.63, length=65, delay=(0.98, 14.0, 2.53),
                 lead=E(0, 0, 1, 2.781,
                        [-44, -32, -29, -43, -52, -45, -22, -22, -23, -27, -24, -25, -29, -32, -24, -19, -22, -26, -24, -18, -17, -52, -99],
                        (34, 32, 17, 21, 38)),
@@ -336,7 +355,9 @@ KINDS = {
                 ]),
         ),
         trend=dict(down=(-0.26, -0.06, -0.38, 0.65, 0.4, 0.027), up=(-1.03, -0.53, -1.93, -1.5, 0.222, 0.008)),
-        jitter=dict(down=(0.28, 1.5, 0.101), up=(1.83, 1.5, 0.051)),
+        jitter=dict(down=(0.28, 3.0, 0.101), up=(1.83, 2.0, 0.051)),
+        body=dict(click=(16, 6), tonal=0.75, lowcap=None, hf_decay=1.5, rattle=(1.0, 1.5), lead=(-10, 2),
+                  ping=(3, -6, 20), up_gain=-2.5, press_rms=-25.0, press_sd=0.5, decay=(0.75, 0.85)),
     ),
     "Synth Obsidian": dict(
         norm=dict(
@@ -353,7 +374,7 @@ KINDS = {
                       [-44, -45, -46, -47, -49, -52, -54, -55, -53, -49, -45, -40, -37, -34, -32, -31, -31, -32, -33, -34, -34, -33, -29],
                       (4.6, 3.3, 2.4, 1.7, 1.2)),
                 ]),
-            up=dict(level=-28.68, length=41, delay=(1, 23.94, 6.77),
+            up=dict(level=-28.68, length=60, delay=(1, 14.0, 5.0),
                 lead=E(0, 0, 1, 8.174,
                        [-42, -58, -99, -99, -53, -50, -55, -53, -42, -37, -30, -33, -33, -31, -24, -23, -25, -26, -25, -20, -17, -28, -46],
                        (6.3, 4.4, 5.3, 4.9, 4.1)),
@@ -446,7 +467,9 @@ KINDS = {
                 ]),
         ),
         trend=dict(down=(1.18, 0.22, -0.37, 0.42, -0.204, 0.15), up=(-8, 0.79, -3, 0.98, 0.007, -0.006)),
-        jitter=dict(down=(1.08, 0.99, 0.191), up=(2.74, 1.5, 0.069)),
+        jitter=dict(down=(1.08, 2.0, 0.191), up=(2.74, 3.0, 0.069)),
+        body=dict(click=(26, 12), tonal=0.75, lowcap=6, hf_decay=2.0, rattle=(4.0, 3.0), lead=(0, 0),
+                  ping=(2, -10, 10), up_gain=0.0, press_rms=-27.0, press_sd=0.5, decay=(0.7, 1.4)),
     ),
 }
 
@@ -494,6 +517,36 @@ def band_noise(rng, n, fc, octaves):
     return y / (np.sqrt(np.mean(y ** 2)) + 1e-12)
 
 
+@functools.lru_cache(maxsize=None)
+def _click(step):
+    """Unit-peak response of the WIDTH band around 2 ** (step / 48) Hz to an impulse."""
+    fc = 2 ** (step / 48)
+    lo = int(fc * 2 ** (-WIDTH / 2))
+    hi = int(fc * 2 ** (WIDTH / 2))
+    x = np.zeros(int(0.06 * RATE))
+    x[0] = 1
+    ir = sosfilt(_bandpass(max(lo, 30), hi), x)
+    return ir / np.abs(ir).max()
+
+
+def add_click(sig, fc, at, gain):
+    """Adds a band's impulse response starting `at` s: with every band of an event starting
+    together, the attack is one phase-aligned click."""
+    ir = _click(int(round(48 * np.log2(fc))))
+    i = int(at * RATE)
+    m = min(len(ir), len(sig) - i)
+    if m > 0:
+        sig[i:i + m] += gain * ir[:m]
+
+
+def partials(rng, n, fc):
+    """Two steady partials at random pitches inside the band around `fc`, unit RMS. Under the
+    band's envelope they ring as damped modes, different on every key."""
+    t = np.arange(n) / RATE
+    f = fc * 2 ** rng.uniform(-WIDTH / 2, WIDTH / 2, 2)
+    return np.sin(2 * np.pi * f[:, None] * t + rng.uniform(0, 2 * np.pi, (2, 1))).sum(axis=0)
+
+
 def burst(n, start, attack, tau):
     """Raised-cosine rise over `attack` s from `start` s, then exponential decay."""
     t = np.arange(n) / RATE - start
@@ -531,6 +584,18 @@ def soft_limit(x, knee=0.7):
     return y
 
 
+def trim(sig):
+    """Ends a key sound once it has faded TRIM_BELOW dB under its peak (at least 20 ms), with a 4 ms fade."""
+    ms = RATE // 1000
+    n = len(sig) // ms
+    env = 20 * np.log10(np.sqrt(np.mean(sig[:n * ms].reshape(n, ms) ** 2, axis=1)) + 1e-12)
+    loud = np.flatnonzero(env > env.max() - TRIM_BELOW)
+    sig = sig[:min(len(sig), max(20, loud[-1] + 1) * ms)].copy()
+    fade = min(len(sig), 4 * ms)
+    sig[len(sig) - fade:] *= np.linspace(1, 0, fade)
+    return sig
+
+
 def add_bands(sig, rng, bands, at, fscale, tscale, gscale=1.0, jitter=1.0):
     """Adds one event: every band gets its own small gain, pitch and decay jitter."""
     n = len(sig)
@@ -547,6 +612,7 @@ def synth_key(kind, code, down):
     way = "down" if down else "up"
     cls = key_class(code)
     stroke = p[cls][way]
+    body = p["body"]
     rng = rng_for(kind, code, down)
     u, row = place(code)
     dx = u - CENTRE[0]
@@ -554,7 +620,7 @@ def synth_key(kind, code, down):
     lc, lr, tc, trw, dc, dr = p["trend"][way]
     lsd, tsd, dsd = p["jitter"][way]
 
-    level = stroke["level"] + lc * dx + lr * dy + rng.normal(0, lsd)
+    level = stroke["level"] + lc * dx + lr * dy + rng.normal(0, lsd) + (0 if down else body["up_gain"])
     tone = tc * dx + trw * dy + rng.normal(0, tsd)
     decay = dc * dx + dr * dy + rng.normal(0, dsd)
     if cls == "big":
@@ -562,7 +628,7 @@ def synth_key(kind, code, down):
         size = np.log2(BIG[code] / 2.6)
         tone -= 1.5 * size
         decay += 0.15 * size
-    fscale, tscale = 2 ** (tone / 12), 2 ** decay
+    fscale, tscale = 2 ** (tone / 12), 2 ** decay * body["decay"][0 if down else 1]
 
     n = int(RATE * (stroke["length"] + START_MS) / 1000)
     sig = np.zeros(n)
@@ -572,12 +638,17 @@ def synth_key(kind, code, down):
     delay = max(0.0, rng.normal(mean, sd)) if late else 0.0
     events = [(stroke["lead"], 0.0)] if stroke["lead"] else []
     events += [(ev, delay) for ev in stroke["events"]]
+    click = 10 ** (body["click"][0 if down else 1] / 20)
     for ev, offset in events:
         happens = rng.random() < ev["chance"]
         at = START_MS + offset + max(0.0, ev["at"] + rng.normal(0, ev["spread"]))
         if not happens:
             continue
         taus = decay_curve(ev["decays"])
+        if body["lowcap"]:
+            taus = np.where(GRID < 500, np.minimum(taus, body["lowcap"]), taus)
+        taus = np.where(GRID >= 6000, taus * body["hf_decay"], taus)
+        hush = 10 ** (body["lead"][0] / 20) if ev is stroke["lead"] else 1.0
         for fc, gain, tau in zip(GRID, ev["gains"], taus):
             if gain <= SILENT:
                 continue
@@ -585,11 +656,45 @@ def synth_key(kind, code, down):
             f = min(fc * fscale * rng.uniform(1 - fsd, 1 + fsd), RATE * 0.42)
             a = ev["attack"] / 1000 * rng.uniform(0.85, 1.15)
             d = tau / 1000 * tscale * rng.uniform(1 - dsd_band, 1 + dsd_band)
-            sig += g * band_noise(rng, n, f, WIDTH) * burst(n, at / 1000, a, d)
+            src = band_noise(rng, n, f, WIDTH)
+            if body["tonal"] and f >= TONAL_FROM:
+                src = np.sqrt(1 - body["tonal"]) * src + np.sqrt(body["tonal"]) * partials(rng, n, f)
+            sig += hush * g * src * burst(n, at / 1000, a, d)
+            if f >= CLICK_FROM:
+                add_click(sig, f, at / 1000, g * click)
+    first = stroke["events"][0]
 
-    fade = int(RATE * 0.006)
-    sig[-fade:] *= np.linspace(1, 0, fade)
-    return soft_limit(sig)
+    def ticks(count, gains, start, span, loudness):
+        """`count` clicks shaped by `gains`, between `start` and `start` + `span` ms."""
+        for _ in range(count):
+            at = start + rng.uniform(0, span)
+            r = rng.uniform(*loudness)
+            for fc, gain in zip(GRID, gains):
+                f = min(fc * fscale, RATE * 0.42)
+                if gain > SILENT and f >= CLICK_FROM:
+                    add_click(sig, f, at / 1000, 10 ** ((level + gain + r) / 20) * click)
+    # Rattle after the main impact, and soft fingertip ticks in the lead-in before it lands.
+    ticks(rng.poisson(body["rattle"][0 if down else 1]), first["gains"], START_MS + delay + 3, 27, (-30, -18))
+    if stroke["lead"]:
+        ticks(rng.poisson(body["lead"][1]), stroke["lead"]["gains"], START_MS + 0.5,
+              max(0.5, delay + first["at"] - 0.5), (-6, 0))
+    # Ping: a few narrow partials from 4 kHz up ring on after the hit, like a spring.
+    count, ping_db, ping_tau = body["ping"]
+    high = [(fc, gain) for fc, gain in zip(GRID, first["gains"]) if fc * fscale >= 4000 and gain > SILENT]
+    i0 = int((START_MS + delay + first["at"]) / 1000 * RATE)
+    if count and high and i0 < n:
+        t = np.arange(n - i0) / RATE
+        for k in rng.choice(len(high), min(count, len(high)), replace=False):
+            fc, gain = high[k]
+            f = min(fc * fscale * 2 ** rng.uniform(-WIDTH / 2, WIDTH / 2), RATE * 0.42)
+            tau = ping_tau / 1000 * rng.uniform(0.7, 1.3)
+            sig[i0:] += 10 ** ((level + gain + ping_db) / 20) * np.exp(-t / tau) * np.sin(2 * np.pi * f * t)
+    if down:
+        # Presses share one loudness per set, so keys differ in timbre rather than in volume.
+        on = int(START_MS / 1000 * RATE)
+        rms = np.sqrt(np.mean(sig[on:on + RATE * 30 // 1000] ** 2)) + 1e-12
+        sig *= 10 ** ((body["press_rms"] + rng.normal(0, body["press_sd"])) / 20) / rms
+    return soft_limit(trim(sig))
 
 
 def finish(sig, peak):

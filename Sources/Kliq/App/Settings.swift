@@ -70,7 +70,7 @@ final class Settings {
         stereoPanning = store.bool(Key.stereoPanning, default: true)
         audibleModifierKeys = store.bool(Key.audibleModifierKeys, default: true)
         ignoreKeyRepeat = store.bool(Key.ignoreKeyRepeat, default: true)
-        playMouseClicks = store.bool(Key.playMouseClicks, default: false)
+        playMouseClicks = store.bool(Key.playMouseClicks, default: true)
         playDingOnReturn = store.bool(Key.playDingOnReturn, default: false)
         sleepOnMicrophone = store.bool(Key.sleepOnMicrophone, default: true)
         sleepOnCamera = store.bool(Key.sleepOnCamera, default: true)

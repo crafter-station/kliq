@@ -9,8 +9,13 @@ struct SoundSettingsView: View {
     var body: some View {
         @Bindable var settings = settings
         SettingsForm {
-            SettingsSection {
-                LabeledContent("Switches") { SoundSetPicker() }
+            SettingsSection("Sound profile") {
+                SoundBoard(compact: true)
+            } footer: {
+                Text("Seven distinct profiles, ready from the first launch.")
+            }
+
+            SettingsSection("Playback") {
                 SettingSlider(title: "Volume", value: $settings.volume)
                 LabeledContent("Output") {
                     Picker("Output", selection: $settings.outputDeviceUID) {

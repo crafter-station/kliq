@@ -37,7 +37,7 @@ struct GeneralSettingsView: View {
                 }
             }
 
-            SettingsSection {
+            SettingsSection("Convenience") {
                 ShortcutRow()
                 LaunchAtLoginToggle(title: "Launch at login")
             }
@@ -74,12 +74,14 @@ struct GeneralSettingsView: View {
 
     private var statusTitle: String {
         if !settings.isEnabled { return "Kliq is off" }
+        if !state.accessibilityGranted { return "Kliq needs access" }
         if state.isSleeping { return QuietStatus.sentence(for: state.sleepReasons) }
         return "Kliq is on"
     }
 
     private var statusDetail: String? {
         if !settings.isEnabled { return nil }
+        if !state.accessibilityGranted { return "Finish setup to hear keys and clicks." }
         if state.isSleeping { return "Sounds come back on their own." }
         guard let set = state.availableSets.first(where: { $0.name == state.currentSetName }) else { return nil }
         return "Playing \(set.displayName)"

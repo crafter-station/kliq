@@ -18,11 +18,11 @@ enum LiquidGlass {
 
 enum SettingsMetrics {
     /// Space between the window edge and the cards.
-    static let pageInset: CGFloat = 24
-    static let sectionSpacing: CGFloat = 24
+    static let pageInset: CGFloat = 28
+    static let sectionSpacing: CGFloat = 22
     /// Space between a card's edge and its rows.
-    static let rowInset: CGFloat = 14
-    static let cardRadius: CGFloat = 14
+    static let rowInset: CGFloat = 16
+    static let cardRadius: CGFloat = 16
 }
 
 /// The translucent ground of a whole window: the desktop shows through, blurred.
@@ -60,7 +60,9 @@ private struct SettingsCard: ViewModifier {
         } else {
             content
                 .background(.thinMaterial, in: shape)
-                .overlay(shape.strokeBorder(Color.primary.opacity(0.1), lineWidth: 0.5))
+                .overlay(shape.fill(Color.primary.opacity(0.018)))
+                .overlay(shape.strokeBorder(Color.primary.opacity(0.09), lineWidth: 0.5))
+                .shadow(color: .black.opacity(0.045), radius: 8, y: 3)
         }
     }
 }
@@ -122,7 +124,8 @@ struct SettingsSection<Header: View, Content: View, Footer: View>: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             header
-                .font(.body.weight(.semibold))
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(.secondary)
                 .padding(.horizontal, SettingsMetrics.rowInset)
             Group(subviews: content) { rows in
                 VStack(spacing: 0) {
@@ -133,7 +136,7 @@ struct SettingsSection<Header: View, Content: View, Footer: View>: View {
                         row
                             .frame(maxWidth: .infinity, minHeight: 24, alignment: .leading)
                             .padding(.horizontal, SettingsMetrics.rowInset)
-                            .padding(.vertical, 10)
+                            .padding(.vertical, 11)
                     }
                 }
                 .settingsCard()
@@ -405,40 +408,6 @@ struct ButtonRow<Content: View>: View {
         HStack(spacing: 8) {
             Spacer()
             content
-        }
-    }
-}
-
-// MARK: - Sound sets
-
-/// Picks the switch set by name, with a Preview button. Choosing a set plays it
-/// once, like choosing an alert sound in System Settings.
-struct SoundSetPicker: View {
-    @Environment(Settings.self) private var settings
-    @Environment(AppState.self) private var state
-    @Environment(AppController.self) private var controller
-
-    var body: some View {
-        HStack(spacing: 8) {
-            if state.availableSets.isEmpty {
-                Text("None available").foregroundStyle(.secondary)
-            } else {
-                Picker("Switches", selection: Binding(
-                    get: { settings.selectedSetName },
-                    set: { controller.selectSet(named: $0, preview: true) })) {
-                    ForEach(state.availableSets) { set in
-                        Text(set.displayName).tag(set.name)
-                    }
-                }
-                .labelsHidden()
-                .fixedSize()
-            }
-            Button {
-                controller.previewCurrentSet()
-            } label: {
-                Label("Preview", systemImage: "play.fill")
-            }
-            .disabled(state.availableSets.isEmpty)
         }
     }
 }

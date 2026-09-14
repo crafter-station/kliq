@@ -21,7 +21,7 @@ final class SoundEngine {
         var stereoPanning = true
         var audibleModifiers = true
         var ignoreKeyRepeat = true
-        var mouseClicks = false
+        var mouseClicks = true
         var dingOnReturn = false
         /// -1...1, see `Settings.tonePitch`.
         var pitchShift: Float = 0
@@ -68,6 +68,17 @@ final class SoundEngine {
         }
     }
 
+    private struct PreviewStep {
+        let delay: Double
+        let buffer: AVAudioPCMBuffer
+    }
+
+    private static let previewPattern: [(delay: Double, code: Int, down: Bool)] = [
+        (0.00, 33, true), (0.08, 33, false),
+        (0.18, 36, true), (0.26, 36, false),
+        (0.40, KeyMapper.space, true), (0.50, KeyMapper.space, false),
+    ]
+
     private static let effectNames = ["ding", "click", "left-down", "left-up", "right-down", "right-up"]
 
     var onPlayed: (@Sendable (Played) -> Void)?
@@ -82,6 +93,8 @@ final class SoundEngine {
     private var bank = Bank()
     private var config = Config()
     private var loadGeneration = 0
+    private var previewGeneration = 0
+    private var previewCache: [String: [PreviewStep]] = [:]
     private var configObserver: NSObjectProtocol?
     private let log = Logger(subsystem: "run.crafter.kliq", category: "audio")
 
@@ -209,19 +222,75 @@ final class SoundEngine {
         }
     }
 
-    /// Plays a short "click kliq" using the loaded set and the current tone, for previews.
+    /// Plays a short "click kliq" using the selected set and the current tone.
     func preview() {
-        let (cfg, snapshot) = lock.withLock { (config, bank) }
+        let (generation, snapshot) = lock.withLock { () -> (Int, Bank) in
+            previewGeneration += 1
+            return (previewGeneration, bank)
+        }
         guard !snapshot.isEmpty else { return }
-        let sequence: [(delay: Double, code: Int, down: Bool)] = [
-            (0.00, 33, true), (0.08, 33, false),
-            (0.18, 36, true), (0.26, 36, false),
-            (0.40, KeyMapper.space, true), (0.50, KeyMapper.space, false),
-        ]
-        for step in sequence {
+        playPreview(Self.previewSteps(from: snapshot), generation: generation)
+    }
+
+    /// Previews a set without selecting it or replacing the active playback bank.
+    /// The six small samples are cached after their first hover.
+    func preview(set: SoundSet) {
+        let (generation, snapshot, cached) = lock.withLock { () -> (Int, Bank, [PreviewStep]?) in
+            previewGeneration += 1
+            return (previewGeneration, bank, previewCache[set.name])
+        }
+        if snapshot.name == set.name {
+            playPreview(Self.previewSteps(from: snapshot), generation: generation)
+            return
+        }
+        if let cached {
+            playPreview(cached, generation: generation)
+            return
+        }
+
+        let target = format
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            guard let self else { return }
+            let available = Set(set.codes)
+            let steps = Self.previewPattern.compactMap { item -> PreviewStep? in
+                guard let resolved = KeyMapper.resolve(item.code, available: available),
+                      let url = set.sampleURL(code: resolved, down: item.down)
+                else { return nil }
+                do {
+                    guard let buffer = try Self.loadBuffer(url, format: target) else { return nil }
+                    return PreviewStep(delay: item.delay, buffer: buffer)
+                } catch {
+                    return nil
+                }
+            }
+            guard !steps.isEmpty else { return }
+            self.lock.withLock { self.previewCache[set.name] = steps }
+            self.playPreview(steps, generation: generation)
+        }
+    }
+
+    /// Stops the remainder of a hover preview when the pointer moves away.
+    func cancelPreview() {
+        lock.withLock { previewGeneration += 1 }
+    }
+
+    private static func previewSteps(from bank: Bank) -> [PreviewStep] {
+        previewPattern.compactMap { item in
+            guard let buffer = bank.buffer(forScanCode: item.code, down: item.down) else { return nil }
+            return PreviewStep(delay: item.delay, buffer: buffer)
+        }
+    }
+
+    private func playPreview(_ steps: [PreviewStep], generation: Int) {
+        for step in steps {
             DispatchQueue.global(qos: .userInteractive).asyncAfter(deadline: .now() + step.delay) { [weak self] in
-                guard let self, let buffer = snapshot.buffer(forScanCode: step.code, down: step.down) else { return }
-                self.play(buffer, on: self.nextVoice(), gain: 1, pitch: cfg.toneRate, pan: 0, brightness: cfg.brightness)
+                guard let self else { return }
+                let cfg = self.lock.withLock { () -> Config? in
+                    generation == self.previewGeneration ? self.config : nil
+                }
+                guard let cfg else { return }
+                self.play(step.buffer, on: self.nextVoice(), gain: 1, pitch: cfg.toneRate,
+                          pan: 0, brightness: cfg.brightness)
             }
         }
     }

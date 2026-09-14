@@ -9,11 +9,11 @@ struct StatsSettingsView: View {
         SettingsForm {
             SettingsSection {
                 HStack(spacing: 0) {
-                    StatTile(title: "Keystrokes", value: stats.keystrokes)
+                    StatTile(symbol: "keyboard", title: "Keystrokes", value: stats.keystrokes)
                     Divider()
-                    StatTile(title: "Mouse clicks", value: stats.clicks)
+                    StatTile(symbol: "computermouse", title: "Mouse clicks", value: stats.clicks)
                     Divider()
-                    StatTile(title: "Dings", value: stats.dings)
+                    StatTile(symbol: "bell", title: "Dings", value: stats.dings)
                 }
                 .padding(.vertical, 6)
             }
@@ -65,22 +65,29 @@ struct StatsSettingsView: View {
 
 /// One counter in the row at the top of Stats.
 private struct StatTile: View {
+    let symbol: String
     let title: String
     let value: Int
 
     var body: some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 5) {
+            Image(systemName: symbol)
+                .font(.system(size: 12, weight: .semibold))
+                .foregroundStyle(Brand.accent)
+                .frame(width: 26, height: 26)
+                .background(Brand.accent.opacity(0.10), in: Circle())
             Text(title)
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
             Text(value.formatted())
-                .font(.system(size: 26, weight: .regular))
+                .font(.system(size: 25, weight: .medium, design: .rounded))
                 .monospacedDigit()
                 .contentTransition(.numericText())
                 .lineLimit(1)
                 .minimumScaleFactor(0.6)
         }
         .frame(maxWidth: .infinity)
+        .padding(.vertical, 4)
         .accessibilityElement(children: .combine)
     }
 }

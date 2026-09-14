@@ -16,7 +16,7 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
     private let volume = MenuSliderView(accessibilityLabel: "Volume")
     private let accessItem = NSMenuItem()
     private let sleepItem = NSMenuItem()
-    private let switchesHeader = NSMenuItem.sectionHeader(title: "Switches")
+    private let switchesHeader = NSMenuItem.sectionHeader(title: "Sound")
     private var setItems: [NSMenuItem] = []
     private var shownSetNames: [String]?
     /// Bumped on every open, so tracking left over from an earlier open stops.
@@ -123,10 +123,6 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
         // The set items go here, inserted by refreshSets.
 
         menu.addItem(.separator())
-        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "dev"
-        let versionItem = NSMenuItem(title: "Version \(version)", action: nil, keyEquivalent: "")
-        versionItem.isEnabled = false
-        menu.addItem(versionItem)
         menu.addItem(actionItem("Settings…", #selector(openSettings), key: ","))
         menu.addItem(.separator())
         menu.addItem(actionItem("Quit Kliq", #selector(quit), key: "q"))
@@ -136,6 +132,17 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
         let settings = controller.settings
         let state = controller.state
         header.toggle.state = settings.isEnabled ? .on : .off
+        if !settings.isEnabled {
+            header.statusText = "Off"
+        } else if !state.accessibilityGranted {
+            header.statusText = "Needs access"
+        } else if state.isSleeping {
+            header.statusText = "Quiet"
+        } else if let selected = state.availableSets.first(where: { $0.name == settings.selectedSetName }) {
+            header.statusText = "On · \(selected.displayName)"
+        } else {
+            header.statusText = "On"
+        }
         // Text first, so the row has its final height when the menu measures it on appearing.
         if state.isSleeping {
             let reasons = state.sleepReasons.joined(separator: ", ")
@@ -144,8 +151,8 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
         accessItem.isHidden = state.accessibilityGranted
         sleepItem.isHidden = !state.isSleeping
         // Skipped while it matches, so a refresh never fights a drag.
-        if abs(volume.slider.doubleValue - settings.volume) > 0.0001 {
-            volume.slider.doubleValue = settings.volume
+        if abs(volume.doubleValue - settings.volume) > 0.0001 {
+            volume.doubleValue = settings.volume
         }
         refreshSets(state.availableSets, selected: settings.selectedSetName)
     }
@@ -203,6 +210,7 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
 
     @objc private func volumeChanged(_ sender: NSSlider) {
         controller.settings.volume = sender.doubleValue
+        volume.updateReadout()
         // On release, play a few keys at the new level. The task runs after the settings
         // observer has passed the volume to the engine.
         let settings = controller.settings
@@ -213,7 +221,7 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
 
     @objc private func selectSet(_ sender: NSMenuItem) {
         guard let name = sender.representedObject as? String else { return }
-        controller.selectSet(named: name)
+        controller.selectSet(named: name, preview: true)
     }
 
     @objc private func wakeNow() {

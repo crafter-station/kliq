@@ -3,7 +3,8 @@ import AppKit
 /// Kliq's mark: a flat keycap with a thick rim, a thin face outline, a depth wedge
 /// along the bottom and right, and a K legend. Drawn from shapes so the app icon,
 /// the menu bar glyph and in-app artwork all come from this one definition.
-/// Tools/make_icon.swift compiles against this file to render AppIcon.icns.
+/// Resources/AppIcon.svg is the master color artwork; this drawing also provides
+/// the monochrome menu-bar mark and a faithful fallback for unbundled debug runs.
 enum KliqLogo {
     struct Style {
         /// The thin outline around the key's face; too fine to keep at menu bar size.
@@ -68,16 +69,94 @@ enum KliqLogo {
         k.stroke()
     }
 
-    /// The app icon artwork: the white mark on a black rounded square, laid out on the
-    /// macOS icon grid (824 of 1024 points), drawn into `canvas`.
+    /// The color app icon, drawn on the macOS icon grid (824 of 1024 points).
     static func drawAppIcon(in canvas: NSRect) {
+        let scale = canvas.width / 1024
+        func point(_ x: CGFloat, _ y: CGFloat) -> NSPoint {
+            NSPoint(x: canvas.minX + x * scale, y: canvas.minY + (1024 - y) * scale)
+        }
+        func color(_ hex: UInt32) -> NSColor {
+            NSColor(srgbRed: CGFloat((hex >> 16) & 0xff) / 255,
+                    green: CGFloat((hex >> 8) & 0xff) / 255,
+                    blue: CGFloat(hex & 0xff) / 255, alpha: 1)
+        }
+
         let tile = canvas.insetBy(dx: canvas.width * 0.098, dy: canvas.width * 0.098)
         let shape = NSBezierPath(roundedRect: tile, xRadius: tile.width * 0.225, yRadius: tile.width * 0.225)
-        NSGradient(starting: NSColor(white: 0.12, alpha: 1), ending: NSColor(white: 0, alpha: 1))?.draw(in: shape, angle: -90)
-        NSColor(white: 1, alpha: 0.14).setStroke()
+        NSGraphicsContext.saveGraphicsState()
+        let tileShadow = NSShadow()
+        tileShadow.shadowColor = NSColor.black.withAlphaComponent(0.24)
+        tileShadow.shadowOffset = NSSize(width: 0, height: -12 * scale)
+        tileShadow.shadowBlurRadius = 15 * scale
+        tileShadow.set()
+        NSGradient(starting: color(0xFBF8F1), ending: color(0xEEE8DE))?.draw(in: shape, angle: -90)
+        NSGraphicsContext.restoreGraphicsState()
+        color(0x31251F).withAlphaComponent(0.13).setStroke()
         shape.lineWidth = max(1, canvas.width * 0.004)
         shape.stroke()
-        draw(in: tile.insetBy(dx: tile.width * 0.185, dy: tile.width * 0.185), color: .white)
+
+        NSGraphicsContext.saveGraphicsState()
+        let transform = NSAffineTransform()
+        transform.translateX(by: canvas.midX, yBy: canvas.midY)
+        transform.rotate(byDegrees: 4)
+        transform.translateX(by: -canvas.midX, yBy: -canvas.midY)
+        transform.concat()
+
+        let cap = NSBezierPath(roundedRect: NSRect(x: canvas.minX + 240 * scale, y: canvas.minY + 260 * scale,
+                                                   width: 544 * scale, height: 496 * scale),
+                               xRadius: 104 * scale, yRadius: 104 * scale)
+        let depth = NSBezierPath(roundedRect: NSRect(x: canvas.minX + 258 * scale, y: canvas.minY + 238 * scale,
+                                                     width: 544 * scale, height: 496 * scale),
+                                 xRadius: 104 * scale, yRadius: 104 * scale)
+        NSGraphicsContext.saveGraphicsState()
+        let keyShadow = NSShadow()
+        keyShadow.shadowColor = color(0x35140F).withAlphaComponent(0.20)
+        keyShadow.shadowOffset = NSSize(width: 0, height: -12 * scale)
+        keyShadow.shadowBlurRadius = 10 * scale
+        keyShadow.set()
+        color(0x273A5D).setFill()
+        depth.fill()
+        NSGraphicsContext.restoreGraphicsState()
+        color(0xC93B31).setFill()
+        cap.fill()
+
+        NSGraphicsContext.saveGraphicsState()
+        cap.addClip()
+        color(0xF5B92E).setStroke()
+        let topFlash = NSBezierPath()
+        topFlash.move(to: point(267, 352))
+        topFlash.curve(to: point(500, 298), controlPoint1: point(345, 310), controlPoint2: point(422, 295))
+        topFlash.lineWidth = 25 * scale
+        topFlash.lineCapStyle = .round
+        topFlash.stroke()
+        let bottomFlash = NSBezierPath()
+        bottomFlash.move(to: point(618, 748))
+        bottomFlash.curve(to: point(771, 654), controlPoint1: point(682, 728), controlPoint2: point(733, 696))
+        bottomFlash.lineWidth = 24 * scale
+        bottomFlash.lineCapStyle = .round
+        bottomFlash.stroke()
+        NSGraphicsContext.restoreGraphicsState()
+
+        let face = NSBezierPath(roundedRect: NSRect(x: canvas.minX + 310 * scale, y: canvas.minY + 368 * scale,
+                                                    width: 404 * scale, height: 340 * scale),
+                                xRadius: 72 * scale, yRadius: 72 * scale)
+        NSGradient(starting: color(0xF05242), ending: color(0xDF3E34))?.draw(in: face, angle: -45)
+        color(0xFF7765).withAlphaComponent(0.62).setStroke()
+        face.lineWidth = 7 * scale
+        face.stroke()
+
+        let letter = NSBezierPath()
+        letter.move(to: point(435, 392))
+        letter.line(to: point(435, 580))
+        letter.move(to: point(565, 390))
+        letter.line(to: point(463, 487))
+        letter.line(to: point(574, 581))
+        letter.lineWidth = 48 * scale
+        letter.lineCapStyle = .square
+        letter.lineJoinStyle = .miter
+        color(0xF8F3E9).setStroke()
+        letter.stroke()
+        NSGraphicsContext.restoreGraphicsState()
     }
 
     /// The app icon at exactly `px` pixels, for the .iconset.

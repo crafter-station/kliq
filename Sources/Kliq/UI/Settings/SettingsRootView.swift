@@ -17,6 +17,16 @@ enum SettingsPage: String, CaseIterable, Identifiable {
         }
     }
 
+    var subtitle: String {
+        switch self {
+        case .general: "Status, startup and access"
+        case .sound: "Shape how every key feels"
+        case .sleep: "Stay quiet at the right moments"
+        case .stats: "Your rhythm at a glance"
+        case .about: "A tiny instrument for your Mac"
+        }
+    }
+
     var symbol: String {
         switch self {
         case .general: "gearshape.fill"
@@ -34,8 +44,8 @@ struct SettingsRootView: View {
     @State private var page: SettingsPage = .general
 
     /// Height of the titlebar band; the traffic lights are centered in it.
-    static let headerHeight: CGFloat = 52
-    static let sidebarWidth: CGFloat = 200
+    static let headerHeight: CGFloat = 64
+    static let sidebarWidth: CGFloat = 184
 
     var body: some View {
         HStack(spacing: 0) {
@@ -46,7 +56,7 @@ struct SettingsRootView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
-        .frame(width: 720, height: 540)
+        .frame(width: 780, height: 580)
         .background(WindowBackdrop())
         #if DEBUG
         .onReceive(NotificationCenter.default.publisher(for: SettingsSnapshots.selectPage)) { note in
@@ -75,9 +85,20 @@ struct SettingsRootView: View {
 
     private var sidebarRows: some View {
         VStack(spacing: 2) {
+            HStack(spacing: 9) {
+                BrandMark(size: 26)
+                    .shadow(color: .black.opacity(0.16), radius: 2, y: 1)
+                Text("Kliq")
+                    .font(.headline)
+                Spacer()
+            }
+            .padding(.horizontal, 7)
+            .padding(.bottom, 14)
+
             ForEach(SettingsPage.allCases) { item in
                 SidebarRow(page: item, isSelected: item == page) { page = item }
             }
+            Spacer(minLength: 16)
         }
         .padding(.horizontal, 10)
         // Rows start below the traffic lights.
@@ -97,12 +118,18 @@ struct SettingsRootView: View {
 
     private var header: some View {
         HStack {
-            Text(page.title)
-                .font(.title3.weight(.semibold))
+            VStack(alignment: .leading, spacing: 2) {
+                Text(page.title)
+                    .font(.title2.weight(.semibold))
+                Text(page.subtitle)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
             Spacer()
         }
-        .padding(.horizontal, SettingsMetrics.pageInset + SettingsMetrics.rowInset)
+        .padding(.horizontal, SettingsMetrics.pageInset)
         .frame(height: Self.headerHeight)
+        .overlay(alignment: .bottom) { Divider().opacity(0.45) }
     }
 
     @ViewBuilder
@@ -117,7 +144,7 @@ struct SettingsRootView: View {
     }
 }
 
-/// One page in the sidebar. The selection is a soft gray pill, never a color.
+/// One page in the sidebar. A restrained brand tint makes the current location obvious.
 private struct SidebarRow: View {
     let page: SettingsPage
     let isSelected: Bool
@@ -126,21 +153,34 @@ private struct SidebarRow: View {
     var body: some View {
         Button(action: action) {
             HStack(spacing: 9) {
-                IconTile(symbol: page.symbol, size: 20)
+                Image(systemName: page.symbol)
+                    .font(.system(size: 13, weight: .medium))
+                    .foregroundStyle(isSelected ? Brand.accent : Color.secondary)
+                    .frame(width: 20)
                 Text(page.title)
+                    .fontWeight(isSelected ? .medium : .regular)
                 Spacer(minLength: 0)
             }
-            .padding(.horizontal, 7)
-            .frame(height: 30)
+            .padding(.horizontal, 9)
+            .frame(height: 34)
             .background {
                 if isSelected {
-                    RoundedRectangle(cornerRadius: 8, style: .continuous)
-                        .fill(Color.primary.opacity(0.1))
+                    RoundedRectangle(cornerRadius: 9, style: .continuous)
+                        .fill(Brand.accent.opacity(0.11))
+                }
+            }
+            .overlay(alignment: .leading) {
+                if isSelected {
+                    Capsule()
+                        .fill(Brand.accent)
+                        .frame(width: 3, height: 16)
+                        .offset(x: -1)
                 }
             }
             .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .animation(.snappy(duration: 0.18), value: isSelected)
     }
 }

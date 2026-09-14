@@ -1,6 +1,6 @@
-/// How a sound set is named in the menu bar menu and Settings.
+/// How a sound set is named throughout the app.
 extension SoundSet {
-    /// Bundled sets drop their "Synth " prefix: "Butter" reads better in a menu.
+    /// Legacy bundled sets drop their old "Synth " prefix.
     var displayName: String {
         isBuiltIn && name.hasPrefix("Synth ") ? String(name.dropFirst("Synth ".count)) : name
     }

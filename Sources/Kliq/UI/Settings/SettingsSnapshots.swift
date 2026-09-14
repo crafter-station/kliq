@@ -39,7 +39,7 @@ enum SettingsSnapshots {
             state.sleepReasons = ["microphone in use", "music playing"]
             state.hotKeyUnavailable = true
             state.notificationsDenied = true
-            state.statusMessage = "Kliq couldn't play Butter. Choose another switch set."
+            state.statusMessage = "Kliq couldn't play KAT. Choose another sound profile."
             for page in [SettingsPage.general, .sound, .sleep] {
                 await capturePage(page, in: settings, name: "\(page.rawValue)-alt", directory: directory)
             }

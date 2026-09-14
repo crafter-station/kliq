@@ -12,37 +12,58 @@ struct AboutView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            BrandMark(size: 96)
-                .shadow(color: .black.opacity(0.25), radius: 6, y: 3)
-                .padding(.bottom, 16)
-            Text("Kliq").font(.title.weight(.semibold))
+            BrandMark(size: 78)
+                .shadow(color: .black.opacity(0.22), radius: 5, y: 3)
+                .padding(.bottom, 14)
+            Text("Kliq").font(.largeTitle.weight(.semibold))
             Text("Version \(version)")
+                .font(.caption)
                 .foregroundStyle(.secondary)
                 .textSelection(.enabled)
                 .padding(.top, 2)
-            Text("Mechanical keyboard sounds for every keystroke and click, with smart sleep triggers so calls stay quiet.")
+            Text("Make every keystroke feel alive.")
+                .font(.title3.weight(.medium))
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: 380)
-                .padding(.top, 16)
-            Text("Free and open source under the MIT License. Bundled sounds are synthesized, not recordings.")
-                .font(.caption)
+                .padding(.top, 18)
+            Text("Seven carefully selected sound profiles, mouse feedback, and automatic quiet time for calls.")
+                .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
                 .frame(maxWidth: 380)
                 .padding(.top, 8)
+            HStack(spacing: 14) {
+                feature("7 profiles", symbol: "waveform")
+                feature("Private", symbol: "hand.raised")
+                feature("Open source", symbol: "chevron.left.forwardslash.chevron.right")
+            }
+            .padding(.top, 20)
             // A plain button rather than Link, which always draws in the system link color.
             Button { openURL(URL(string: "https://kliq.crafter.run")!) } label: {
-                Text("kliq.crafter.run").underline()
+                Label("kliq.crafter.run", systemImage: "arrow.up.right")
             }
-            .buttonStyle(.plain)
+            .buttonStyle(.bordered)
             .pointerStyle(.link)
             .accessibilityAddTraits(.isLink)
-            .padding(.top, 24)
+            .padding(.top, 22)
+            Text("Free and open source · MIT License")
+                .font(.caption2)
+                .foregroundStyle(.tertiary)
+                .padding(.top, 10)
         }
         .fixedSize(horizontal: false, vertical: true)
         .padding(32)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         // Sits a little above center, balancing the page header.
         .padding(.bottom, SettingsRootView.headerHeight / 2)
+    }
+
+    private func feature(_ title: String, symbol: String) -> some View {
+        Label(title, systemImage: symbol)
+            .font(.caption.weight(.medium))
+            .foregroundStyle(.secondary)
+            .padding(.horizontal, 10)
+            .frame(height: 28)
+            .background(Color.primary.opacity(0.055), in: Capsule())
     }
 }

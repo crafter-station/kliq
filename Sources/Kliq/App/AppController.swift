@@ -27,8 +27,8 @@ final class AppController {
     @ObservationIgnored private let log = Logger(subsystem: "run.crafter.kliq", category: "app")
     @ObservationIgnored private let firstEventSeen = OSAllocatedUnfairLock(initialState: false)
 
-    /// The mellowest bundled set, chosen until the user picks another one.
-    private static let defaultSetName = "Synth Butter"
+    /// The default bundled profile, chosen until the user picks another one.
+    private static let defaultSetName = "Cherry"
     private static let noSoundsMessage = "Kliq couldn't find its sounds. Reinstalling Kliq should bring them back."
 
     // MARK: Lifecycle
@@ -87,6 +87,7 @@ final class AppController {
 
     /// With `preview`, plays the set once it has loaded, like choosing an alert sound.
     func selectSet(named name: String, preview: Bool = false) {
+        engine.cancelPreview()
         settings.selectedSetName = name
         guard preview else { return }
         if state.currentSetName == name { engine.preview() } else { previewWhenLoaded = true }
@@ -98,6 +99,14 @@ final class AppController {
 
     func previewCurrentSet() {
         engine.preview()
+    }
+
+    func preview(set: SoundSet) {
+        engine.preview(set: set)
+    }
+
+    func cancelSoundPreview() {
+        engine.cancelPreview()
     }
 
     /// Suspends the global shortcut while Settings records a new one, so pressing

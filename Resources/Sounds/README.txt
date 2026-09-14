@@ -13,8 +13,10 @@ are converted at load time. Missing codes fall back to a neighbouring key.
 
 Top-level effect files (any of the extensions above):
     ding                    played on Return when "Play ding on Return" is on
-    left-down / left-up     mouse button sounds (right-down / right-up too)
+    left-down / left-up     left mouse button sounds
+    right-down / right-up   right mouse button sounds
     click                   fallback mouse click
 
-The bundled sets (Butter, Glass, Obsidian) and effects are by Cris, generated
-by Tools/gen_sounds.py in the Kliq repository.
+The definitive bundled sets are Cherry, DSA, KAT, MT3, OEM, SA, and XDA.
+Kliq intentionally discovers only these seven folders. The product display order is
+KAT, Cherry, MT3, XDA, OEM, SA, and DSA.

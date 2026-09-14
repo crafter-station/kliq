@@ -18,6 +18,41 @@ APP_NAME="Kliq"
 CONFIG="${CONFIG:-release}"
 BUILD_DIR="build"
 APP="$BUILD_DIR/$APP_NAME.app"
+
+# Keep the product library exact. This guards both local builds and releases from
+# silently shipping an extra profile or omitting one of the definitive seven.
+EXPECTED_SOUND_SETS=("Cherry" "DSA" "KAT" "MT3" "OEM" "SA" "XDA")
+EXPECTED_SOUND_COUNTS=(128 128 128 109 128 124 128)
+ACTUAL_SOUND_SETS=$(find Resources/Sounds -mindepth 1 -maxdepth 1 -type d -exec basename {} \; | LC_ALL=C sort)
+EXPECTED_SOUND_SET_LIST=$(printf '%s\n' "${EXPECTED_SOUND_SETS[@]}" | LC_ALL=C sort)
+if [ "$ACTUAL_SOUND_SETS" != "$EXPECTED_SOUND_SET_LIST" ]; then
+  echo "sound library must contain exactly: ${EXPECTED_SOUND_SETS[*]}" >&2
+  echo "found: ${ACTUAL_SOUND_SETS//$'\n'/, }" >&2
+  exit 1
+fi
+shopt -s nullglob
+for SET_INDEX in "${!EXPECTED_SOUND_SETS[@]}"; do
+  SET_NAME="${EXPECTED_SOUND_SETS[$SET_INDEX]}"
+  DOWN_SAMPLES=("Resources/Sounds/$SET_NAME"/*-down.wav)
+  UP_SAMPLES=("Resources/Sounds/$SET_NAME"/*-up.wav)
+  if [ "${#DOWN_SAMPLES[@]}" -eq 0 ] || [ "${#UP_SAMPLES[@]}" -eq 0 ]; then
+    echo "sound set $SET_NAME needs both press and release samples" >&2
+    exit 1
+  fi
+  SAMPLE_COUNT=$(find "Resources/Sounds/$SET_NAME" -maxdepth 1 -type f -name '*.wav' | wc -l | tr -d ' ')
+  if [ "$SAMPLE_COUNT" -ne "${EXPECTED_SOUND_COUNTS[$SET_INDEX]}" ]; then
+    echo "sound set $SET_NAME must contain ${EXPECTED_SOUND_COUNTS[$SET_INDEX]} WAV files; found $SAMPLE_COUNT" >&2
+    exit 1
+  fi
+done
+shopt -u nullglob
+
+EXPECTED_EFFECT_FILES=$(printf '%s\n' click.wav ding-down.wav ding-up.wav ding.wav left-down.wav left-up.wav right-down.wav right-up.wav | LC_ALL=C sort)
+ACTUAL_EFFECT_FILES=$(find Resources/Sounds -maxdepth 1 -type f -name '*.wav' -exec basename {} \; | LC_ALL=C sort)
+if [ "$ACTUAL_EFFECT_FILES" != "$EXPECTED_EFFECT_FILES" ]; then
+  echo "the bundled effects do not match the definitive sound library" >&2
+  exit 1
+fi
 # macOS ties the Accessibility grant to the signature, so sign local builds with the
 # same Developer ID that releases use when it's in the keychain; switching between
 # identities makes an existing grant stop applying. Falls back to an Apple

@@ -16,14 +16,14 @@ struct OnboardingView: View {
                     .shadow(color: .black.opacity(0.25), radius: 4, y: 2)
                     .padding(.bottom, 10)
                 Text("Welcome to Kliq").font(.title2.weight(.semibold))
-                Text("Mechanical keyboard sounds for every keystroke.").foregroundStyle(.secondary)
+                Text("Mechanical keyboard sounds for every key and click.").foregroundStyle(.secondary)
             }
             .padding(.top, 28)
             .padding(.bottom, 12)
 
             SettingsForm {
-                step(number: 1, title: "Let Kliq hear your keys") {
-                    Text("Kliq needs Accessibility access to notice key presses. It never records what you type.")
+                step(number: 1, title: "Let Kliq hear keys and clicks") {
+                    Text("Kliq needs Accessibility access to notice key presses and mouse clicks. It never records what you type.")
                         .foregroundStyle(.secondary)
                         .fixedSize(horizontal: false, vertical: true)
                     HStack(spacing: 8) {
@@ -41,10 +41,10 @@ struct OnboardingView: View {
                     }
                 }
 
-                step(number: 2, title: "Pick your switches") {
-                    LabeledContent("Switches") { SoundSetPicker() }
+                step(number: 2, title: "Find your sound") {
+                    SoundBoard()
                 } footer: {
-                    Text("Change them any time from the menu bar.")
+                    Text("Hover to audition. Click to choose. Change it any time from the menu bar.")
                 }
 
                 step(number: 3, title: "Start automatically") {
@@ -64,7 +64,7 @@ struct OnboardingView: View {
             .padding(.horizontal, SettingsMetrics.pageInset)
             .padding(.vertical, 14)
         }
-        .frame(width: 520, height: 600)
+        .frame(width: 640, height: 720)
         .background(WindowBackdrop())
     }
 

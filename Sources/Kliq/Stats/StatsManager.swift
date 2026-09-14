@@ -42,11 +42,17 @@ final class StatsManager {
     var totalEvents: Int { keystrokes + clicks + dings }
 
     var favouriteSet: String? {
-        usageBySet.max { $0.value < $1.value }?.key
+        visibleUsage.max { $0.value < $1.value }?.key
     }
 
     var usageSorted: [(name: String, count: Int)] {
-        usageBySet.map { (name: $0.key, count: $0.value) }.sorted { $0.count > $1.count }
+        visibleUsage.map { (name: $0.key, count: $0.value) }.sorted { $0.count > $1.count }
+    }
+
+    /// Keep historical data through upgrades, while the UI shows only current products.
+    private var visibleUsage: [String: Int] {
+        let allowedSets = Set(SoundLibrary.bundledSetNames)
+        return usageBySet.filter { allowedSets.contains($0.key) }
     }
 
     func record(_ played: SoundEngine.Played, setName: String) {

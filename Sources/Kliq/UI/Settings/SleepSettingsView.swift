@@ -21,9 +21,15 @@ struct SleepSettingsView: View {
             }
 
             SettingsSection("Go quiet when") {
-                Toggle("Microphone is in use", isOn: $settings.sleepOnMicrophone)
-                Toggle("Camera is on", isOn: $settings.sleepOnCamera)
-                Toggle("Music or Spotify is playing", isOn: $settings.sleepOnNowPlaying)
+                Toggle(isOn: $settings.sleepOnMicrophone) {
+                    Label("Microphone is in use", systemImage: "mic.fill")
+                }
+                Toggle(isOn: $settings.sleepOnCamera) {
+                    Label("Camera is on", systemImage: "video.fill")
+                }
+                Toggle(isOn: $settings.sleepOnNowPlaying) {
+                    Label("Music is playing", systemImage: "music.note")
+                }
             }
 
             MoreOptions {

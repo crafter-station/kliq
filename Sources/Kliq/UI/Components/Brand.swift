@@ -1,10 +1,10 @@
 import AppKit
 import SwiftUI
 
-/// Kliq's palette: monochrome. Black on light, white on dark, grays in between.
+/// Kliq's palette: quiet neutrals with one warm signal borrowed from the app icon.
 enum Brand {
-    /// Switches, sliders, selection and prominent buttons.
-    static let accent = Color(light: 0x111113, dark: 0xFFFFFF)
+    /// Active state, selection and primary actions. Everything else stays neutral.
+    static let accent = Color(light: 0xD83A27, dark: 0xFF6B55)
 
     /// Icon tiles: a soft gray gradient with a glyph that contrasts with it.
     static let tileTop = Color(light: 0xFFFFFF, dark: 0x5E5E62)
