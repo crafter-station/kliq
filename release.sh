@@ -43,7 +43,6 @@ CODESIGN_IDENTITY="$CODESIGN_IDENTITY" VERSION="$VERSION" BUILD_NUMBER="$BUILD_N
 
 APP="build/Kliq.app"
 DMG="build/Kliq.dmg"
-STAGE="build/dmg"
 
 # Notarize the app on its own first and staple its ticket, so it opens even when
 # someone launches it for the first time without a network connection.
@@ -54,12 +53,7 @@ xcrun stapler staple "$APP"
 rm -f build/Kliq-app.zip
 
 echo "▸ packaging $DMG"
-rm -rf "$STAGE" "$DMG"
-mkdir -p "$STAGE"
-ditto "$APP" "$STAGE/Kliq.app"
-ln -s /Applications "$STAGE/Applications"
-hdiutil create -volname "Kliq" -srcfolder "$STAGE" -ov -format UDZO "$DMG" >/dev/null
-rm -rf "$STAGE"
+Tools/make_dmg.sh "$APP" "$DMG" >/dev/null
 codesign --force --timestamp --sign "$CODESIGN_IDENTITY" "$DMG"
 
 echo "▸ notarizing the DMG (takes a few minutes)"

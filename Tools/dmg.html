@@ -1,0 +1,30 @@
+<!doctype html>
+<!-- Background of the Kliq.dmg window, 660×420. Render with Tools/render_dmg_background.sh.
+     Finder draws the app and the Applications shortcut on top, centered at (180, 250)
+     and (480, 250) as set in Tools/dmg_settings.py, so the arrow sits between them. -->
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;600&display=swap">
+<style>
+  html, body { margin: 0; width: 660px; height: 420px; overflow: hidden; }
+  body { background: radial-gradient(120% 90% at 50% 0%, #FAF9F6 0%, #F1EFEA 70%, #ECEAE4 100%); }
+  .copy { position: absolute; left: 0; right: 0; top: 54px; text-align: center; font-family: "Geist", -apple-system, sans-serif; }
+  h1 { margin: 0; font-weight: 600; font-size: 32px; letter-spacing: -0.035em; color: #1B1B1B; }
+  p { margin: 8px 0 0; font-weight: 400; font-size: 16px; letter-spacing: -0.01em; color: #7D7D7A; }
+  svg { position: absolute; inset: 0; }
+</style>
+
+<div class="copy">
+  <h1>Install Kliq</h1>
+  <p>Drag Kliq to Applications</p>
+</div>
+
+<svg width="660" height="420" viewBox="0 0 660 420" aria-hidden="true">
+  <defs>
+    <!-- The site's hand-cut recipe, scaled down for a thin stroke. -->
+    <filter id="rough" x="-10%" y="-60%" width="120%" height="220%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" seed="3" result="w"/><feDisplacementMap in="SourceGraphic" in2="w" scale="4" xChannelSelector="R" yChannelSelector="G" result="a"/><feTurbulence type="fractalNoise" baseFrequency="0.5" numOctaves="1" seed="5" result="b"/><feDisplacementMap in="a" in2="b" scale="1.6" xChannelSelector="R" yChannelSelector="G"/></filter>
+  </defs>
+  <g fill="none" stroke="#8A8A86" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" filter="url(#rough)">
+    <path d="M276 250H384"/>
+    <path d="M368 236L386 250L368 264"/>
+  </g>
+</svg>

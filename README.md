@@ -67,8 +67,9 @@ mouse and Return effects, are WAV files. These are the complete product sound li
 open build/Kliq.app
 ```
 
-Or `make build` / `make run`. `make help` lists every shortcut (build, release,
-web-sounds, icon, og, diagnose, clean) wrapping the scripts below.
+Or `make build` / `make run`. `make help` lists every shortcut (build, dmg,
+release, web-sounds, icon, og, dmg-background, diagnose, clean) wrapping the
+scripts below.
 
 Requires macOS 15 and Xcode 26 (or a matching Swift toolchain). The script compiles
 with `swift build`, assembles `build/Kliq.app`, and signs it with the hardened runtime.
@@ -98,6 +99,11 @@ DMG, notarizes and staples it, and prints its SHA-256. It refuses to run if
 `Resources/` has anything that is not committed, so a release contains exactly what
 is in this repository. The DMG is always named `Kliq.dmg`, so the
 `releases/latest/download/Kliq.dmg` link on the website keeps working.
+
+The DMG opens as a drag-to-Applications window. `Tools/make_dmg.sh` builds it with
+[dmgbuild](https://github.com/dmgbuild/dmgbuild) (run through `uv`, so nothing to
+install) over `Resources/DMGBackground.tiff`, which `make dmg-background` renders
+from `Tools/dmg.html`. `make dmg` builds an unnotarized copy to preview the window.
 
 ```
 # once: store notarization credentials in the keychain, using an App Store
