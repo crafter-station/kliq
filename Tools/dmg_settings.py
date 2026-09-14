@@ -8,7 +8,8 @@ app_name = os.path.basename(app)
 
 files = [app]
 symlinks = {"Applications": "/Applications"}
-hide_extensions = [app_name]
+# No hide_extensions: it stamps Finder info on the app bundle, which breaks strict
+# signature checks. Finder hides ".app" by default anyway.
 icon = "Resources/AppIcon.icns"
 background = "Resources/DMGBackground.tiff"
 format = "UDZO"
