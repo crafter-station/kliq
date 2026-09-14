@@ -58,7 +58,7 @@
   .navlinks a.solid { color: var(--text); background: var(--raised); }
 
   /* Stage: the card floats in the middle, hand-cut keys spill in from the edges. */
-  .stage { position: relative; max-width: 1080px; margin: 0 auto; padding-block: 36px 80px; }
+  .stage { position: relative; max-width: 1080px; margin: 0 auto; padding-block: 20px 48px; }
   .decor { position: absolute; pointer-events: none; z-index: 0; }
   .decor svg { display: block; width: 100%; height: auto; overflow: visible; }
   .decor.left { left: -150px; top: -30px; width: 400px; }
@@ -68,42 +68,40 @@
 
   .hero { position: relative; z-index: 1; max-width: 740px; margin: 0 auto; background: var(--card); border-radius: 30px; padding: 10px; display: grid; gap: 10px; box-shadow: 0 50px 90px -40px rgba(0, 0, 0, .6); }
   .tile { position: relative; border-radius: 21px; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-  .tile .copy { position: relative; z-index: 1; padding: 28px 28px 26px; display: grid; align-content: space-between; gap: 24px; }
+  .tile .copy { position: relative; z-index: 1; padding: 20px 22px 16px; display: grid; align-content: space-between; gap: 12px; }
   .tile .art { position: relative; min-height: 100%; }
   /* The art fills only its own column, anchored bottom-right; tiles bleed off that corner. */
   .tile .art svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .tile.red { background: var(--red); min-height: 290px; }
-  .tile.navy { background: var(--navy); min-height: 168px; }
+  .tile.red { background: var(--red); }
+  .tile.navy { background: var(--navy); min-height: 122px; }
   .mark-line { display: flex; align-items: center; gap: 10px; font: 500 12px var(--mono); letter-spacing: .04em; color: rgba(255, 255, 255, .78); }
-  h1 { margin: 0; font-weight: 600; font-size: clamp(36px, 5.6vw, 52px); line-height: .98; letter-spacing: -0.05em; text-wrap: balance; }
-  .tile p { margin: 10px 0 0; font-size: 17px; line-height: 1.45; max-width: 25ch; }
+  h1 { margin: 0; font-weight: 600; font-size: clamp(28px, 4.6vw, 40px); line-height: .98; letter-spacing: -0.05em; text-wrap: balance; }
+  .tile p { margin: 6px 0 0; font-size: 15.5px; line-height: 1.4; max-width: 25ch; }
   .tile.red p { color: rgba(255, 255, 255, .86); }
-  .tile.navy h2 { margin: 0; font-size: 25px; line-height: 1.1; font-weight: 600; letter-spacing: -0.035em; }
-  .tile.navy p { color: rgba(214, 230, 245, .74); font-size: 16px; }
+  .tile.navy h2 { margin: 0; font-size: 22px; line-height: 1.1; font-weight: 600; letter-spacing: -0.035em; }
+  .tile.navy p { color: rgba(214, 230, 245, .74); font-size: 15px; }
   .cta { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
-  .btn { display: inline-flex; align-items: center; gap: 8px; font: 500 15px var(--sans); text-decoration: none; padding: 11px 16px; border-radius: 12px; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; font: 500 14px var(--sans); text-decoration: none; padding: 9px 14px; border-radius: 11px; }
   .btn.light { background: #FFFFFF; color: #1E1E1E; }
   .btn.light:hover { background: #F1EFEA; }
   .meta { font: 500 12px var(--mono); color: rgba(255, 255, 255, .78); letter-spacing: .02em; }
 
-  /* Try it: a big input, like a message box, that plays the real switches. */
-  .try { padding: 16px 12px 4px; display: grid; gap: 14px; }
-  .try-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 0 10px; flex-wrap: wrap; }
-  .try-head h2 { margin: 0; font-size: 22px; font-weight: 500; letter-spacing: -0.025em; }
-  .box { background: var(--inner); border: 1px solid var(--line); border-radius: 22px; padding: 16px 16px 14px; display: grid; gap: 12px; transition: border-color .15s; }
+  /* Try it: a big input, like a message box, that plays the real switches — part of the hero, not a scroll away. */
+  .tile.red .try { grid-column: 1 / -1; min-width: 0; padding: 2px 22px 18px; display: grid; gap: 8px; }
+  .box { background: var(--inner); border: 1px solid var(--line); border-radius: 18px; padding: 10px 14px 8px; display: grid; gap: 6px; transition: border-color .15s; }
   .box:focus-within { border-color: #4B4B4A; }
-  .box textarea { width: 100%; min-height: 104px; resize: none; background: transparent; border: 0; outline: 0; color: var(--text); font: 21px/1.45 var(--sans); letter-spacing: -0.01em; padding: 2px 4px 0; }
+  .box textarea { width: 100%; min-height: 60px; resize: none; background: transparent; border: 0; outline: 0; color: var(--text); caret-color: var(--text); font: 18px/1.4 var(--sans); letter-spacing: -0.01em; padding: 2px 4px 0; }
   .box textarea::placeholder { color: #8E8E8B; }
   .box textarea:focus-visible { outline: 0; }
   .bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
-  .sets { display: flex; gap: 6px; flex-wrap: wrap; }
-  .sets button { font: 500 13px var(--mono); color: var(--muted); background: var(--raised); border: 0; border-radius: 12px; padding: 10px 14px; cursor: pointer; }
-  .sets button:hover { color: var(--text); }
-  .sets button[aria-pressed="true"] { color: #1E1E1E; background: var(--text); }
-  .round { flex: none; width: 46px; height: 46px; border-radius: 50%; border: 0; background: #6A6A68; color: #1E1E1E; display: grid; place-items: center; cursor: pointer; }
+  .live-label { font: 500 13px var(--mono); color: var(--muted); }
+  .soundboard { display: flex; gap: 5px; flex-wrap: wrap; min-width: 0; }
+  .sound-key { font: 500 12.5px var(--mono); color: var(--muted); background: var(--raised); border: 0; border-radius: 10px; padding: 7px 11px; cursor: pointer; }
+  .sound-key:hover { color: var(--text); }
+  .sound-key[aria-pressed="true"] { color: #1E1E1E; background: var(--text); }
+  .round { flex: none; width: 38px; height: 38px; border-radius: 50%; border: 0; background: #6A6A68; color: #1E1E1E; display: grid; place-items: center; cursor: pointer; }
   .round[aria-pressed="false"] { background: var(--raised); color: var(--muted); }
-  .round svg { width: 20px; height: 20px; }
-  .fineprint { margin: 0; padding: 0 10px 8px; font-size: 13px; color: var(--faint); }
+  .round svg { width: 17px; height: 17px; }
 
   /* Features */
   .features { max-width: 1080px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; position: relative; z-index: 1; }
@@ -127,6 +125,8 @@
   footer a:hover { color: var(--text); }
 
   .key { transition: transform .07s ease-out; transform-box: fill-box; }
+  .key[data-letter] { cursor: pointer; }
+  .decor .key[data-letter] { pointer-events: auto; }
   .key.down { transform: translate(3px, 4px); }
   @media (prefers-reduced-motion: reduce) { .key, .box { transition: none; } }
 
@@ -134,8 +134,11 @@
     .tile { grid-template-columns: 1fr; }
     .tile .art { height: 190px; }
     .tile.navy .art { height: 130px; }
-    .tile .copy { padding: 24px 22px 20px; }
-    .box textarea { font-size: 18px; }
+    .tile .copy { padding: 20px 20px 16px; }
+    .tile.red .copy { order: 1; }
+    .tile.red .try { order: 2; }
+    .tile.red .art { order: 3; height: 150px; }
+    .box textarea { font-size: 17px; }
   }
 </style>
 <!-- Vercel Web Analytics: cookieless page views, served from this domain. -->
@@ -183,6 +186,28 @@
           </div>
         </div>
         <div class="art"><svg id="art-hero" viewBox="0 0 400 300" preserveAspectRatio="xMaxYMax meet" role="img" aria-label="Hand-cut keycaps and a switch stem on colored tiles"></svg></div>
+
+        <div class="try">
+          <div class="soundboard" role="group" aria-label="Sound profile">
+            <button type="button" class="sound-key" data-set="kat" aria-pressed="false">KAT</button>
+            <button type="button" class="sound-key" data-set="cherry" aria-pressed="true">Cherry</button>
+            <button type="button" class="sound-key" data-set="mt3" aria-pressed="false">MT3</button>
+            <button type="button" class="sound-key" data-set="xda" aria-pressed="false">XDA</button>
+            <button type="button" class="sound-key" data-set="oem" aria-pressed="false">OEM</button>
+            <button type="button" class="sound-key" data-set="sa" aria-pressed="false">SA</button>
+            <button type="button" class="sound-key" data-set="dsa" aria-pressed="false">DSA</button>
+          </div>
+          <div class="box">
+            <div class="bar">
+              <span class="live-label"><span id="live-profile">Cherry</span> · live keyboard</span>
+              <button type="button" class="round" id="sound" aria-pressed="true" aria-label="Sound on">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor"/><path id="wave" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+              </button>
+            </div>
+            <label for="pad" class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Type here to hear the switches</label>
+            <textarea id="pad" rows="2" placeholder="Type here to hear Cherry…" spellcheck="false" autocomplete="off" autofocus></textarea>
+          </div>
+        </div>
       </div>
 
       <div class="tile navy">
@@ -193,52 +218,6 @@
           </div>
         </div>
         <div class="art"><svg id="art-quiet" viewBox="0 0 360 170" preserveAspectRatio="xMaxYMax meet" role="img" aria-label="A microphone next to a resting key"></svg></div>
-      </div>
-
-      <div class="try">
-        <div class="try-head">
-          <div>
-            <h2>Hear Kliq</h2>
-            <p>Meet the seven recorded profiles included with the app.</p>
-          </div>
-          <div class="profile-status" id="profile-status" aria-live="polite">
-            <span aria-hidden="true">●</span> Cherry selected
-          </div>
-        </div>
-        <div class="soundboard" role="group" aria-label="Sound profile">
-          <button type="button" class="sound-key" data-set="kat" aria-pressed="false">
-            <span class="mini-cap" aria-hidden="true">K</span><span>KAT</span>
-          </button>
-          <button type="button" class="sound-key" data-set="cherry" aria-pressed="true">
-            <span class="mini-cap" aria-hidden="true">C</span><span>Cherry</span>
-          </button>
-          <button type="button" class="sound-key" data-set="mt3" aria-pressed="false">
-            <span class="mini-cap" aria-hidden="true">M</span><span>MT3</span>
-          </button>
-          <button type="button" class="sound-key" data-set="xda" aria-pressed="false">
-            <span class="mini-cap" aria-hidden="true">X</span><span>XDA</span>
-          </button>
-          <button type="button" class="sound-key" data-set="oem" aria-pressed="false">
-            <span class="mini-cap" aria-hidden="true">O</span><span>OEM</span>
-          </button>
-          <button type="button" class="sound-key" data-set="sa" aria-pressed="false">
-            <span class="mini-cap" aria-hidden="true">S</span><span>SA</span>
-          </button>
-          <button type="button" class="sound-key" data-set="dsa" aria-pressed="false">
-            <span class="mini-cap" aria-hidden="true">D</span><span>DSA</span>
-          </button>
-        </div>
-        <div class="box">
-          <div class="bar">
-            <span class="live-label"><i aria-hidden="true"></i><span id="live-profile">Cherry</span> · live keyboard</span>
-            <button type="button" class="round" id="sound" aria-pressed="true" aria-label="Sound on">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor"/><path id="wave" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
-            </button>
-          </div>
-          <label for="pad" class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Type here to hear the switches</label>
-          <textarea id="pad" rows="3" placeholder="Type here to hear Cherry…" spellcheck="false" autocomplete="off"></textarea>
-        </div>
-        <p class="fineprint">Hover after your first click to audition. Type to hear the same profiles Kliq plays across your Mac.</p>
       </div>
     </section>
   </div>
@@ -361,13 +340,13 @@
 
   set("art-hero",
     tile(34, 70, 150, 150, C.green,
-      keycap({ x: 60, y: 104, w: 98, h: 90, cap: "bone", legend: "K", shadow: C.yellow, seed: 1, press: true })) +
+      keycap({ x: 60, y: 104, w: 98, h: 90, cap: "bone", legend: "K", letter: "K", shadow: C.yellow, seed: 1, press: true })) +
     tile(146, 128, 150, 200, C.lavender,
       stem({ cx: 221, cy: 205, s: 84, color: C.red, crossShadow: C.yellow, shadow: C.navy, seed: 2 })) +
     tile(236, 30, 140, 140, C.navy,
-      keycap({ x: 262, y: 58, w: 88, h: 82, cap: "yellow", legend: "Q", shadow: C.clear, fleck: C.red, seed: 3, press: true })) +
+      keycap({ x: 262, y: 58, w: 88, h: 82, cap: "yellow", legend: "Q", letter: "Q", shadow: C.clear, fleck: C.red, seed: 3, press: true })) +
     tile(306, 158, 140, 170, C.clear,
-      coil(300, 290, 150, 5, 20, C.red, 4) + keycap({ x: 326, y: 184, w: 70, h: 64, cap: "red", legend: "L", shadow: C.navy, fleck: C.yellow, seed: 5, press: true })));
+      coil(300, 290, 150, 5, 20, C.red, 4) + keycap({ x: 326, y: 184, w: 70, h: 64, cap: "red", legend: "L", letter: "L", shadow: C.navy, fleck: C.yellow, seed: 5, press: true })));
 
   set("art-quiet",
     mic(118, 20, C.clear, C.navy, 1) +
@@ -388,10 +367,10 @@
   set("art-shortcut", `<rect width="320" height="150" fill="${C.green}"/>` +
     keycap({ x: 50, y: 44, w: 62, h: 60, cap: "bone", legend: "⌃", shadow: C.yellow, seed: 1 }) +
     keycap({ x: 124, y: 44, w: 62, h: 60, cap: "bone", legend: "⌥", shadow: C.yellow, seed: 2 }) +
-    keycap({ x: 198, y: 44, w: 62, h: 60, cap: "red", legend: "K", shadow: C.yellow, fleck: C.yellow, seed: 3 }));
+    keycap({ x: 198, y: 44, w: 62, h: 60, cap: "red", legend: "K", letter: "K", shadow: C.yellow, fleck: C.yellow, seed: 3 }));
 
   set("art-private", `<rect width="320" height="150" fill="${C.yellow}"/>` +
-    keycap({ x: 70, y: 44, w: 66, h: 62, cap: "navy", legend: "A", shadow: C.red, seed: 1 }) +
+    keycap({ x: 70, y: 44, w: 66, h: 62, cap: "navy", legend: "A", letter: "A", shadow: C.red, seed: 1 }) +
     ripple(148, 75, C.navy, 1, 2) +
     `<g fill="none" stroke="${C.red}" stroke-width="7" stroke-linecap="round"${rough(3)}><circle cx="252" cy="75" r="26"/><path d="M234 57L270 93"/></g>`);
 
@@ -405,17 +384,17 @@
   })).join(""));
 
   set("decor-left",
-    keycap({ x: 40, y: 30, w: 130, h: 118, cap: "green", legend: "W", shadow: C.lavender, fleck: C.yellow, rot: -12, seed: 1 }) +
-    keycap({ x: 200, y: 120, w: 112, h: 102, cap: "red", legend: "E", shadow: C.yellow, fleck: C.yellow, rot: 10, seed: 2 }) +
+    keycap({ x: 40, y: 30, w: 130, h: 118, cap: "green", legend: "W", letter: "W", shadow: C.lavender, fleck: C.yellow, rot: -12, seed: 1 }) +
+    keycap({ x: 200, y: 120, w: 112, h: 102, cap: "red", legend: "E", letter: "E", shadow: C.yellow, fleck: C.yellow, rot: 10, seed: 2 }) +
     keycap({ x: 50, y: 250, w: 134, h: 122, cap: "lav", shadow: C.navy, fleck: C.clear, rot: 6, seed: 3 }) +
     stem({ cx: 290, cy: 350, s: 92, color: C.clear, crossShadow: C.red, shadow: C.yellow, rot: -8, seed: 4 }) +
     coil(40, 470, 300, 8, 26, C.yellow, 5) +
-    keycap({ x: 170, y: 520, w: 104, h: 96, cap: "yellow", legend: "R", shadow: C.red, fleck: C.red, rot: -8, seed: 6 }));
+    keycap({ x: 170, y: 520, w: 104, h: 96, cap: "yellow", legend: "R", letter: "R", shadow: C.red, fleck: C.red, rot: -8, seed: 6 }));
 
   set("decor-right",
-    keycap({ x: 190, y: 30, w: 150, h: 134, cap: "green", legend: "Y", shadow: C.yellow, fleck: C.yellow, rot: 14, seed: 1 }) +
+    keycap({ x: 190, y: 30, w: 150, h: 134, cap: "green", legend: "Y", letter: "Y", shadow: C.yellow, fleck: C.yellow, rot: 14, seed: 1 }) +
     stem({ cx: 120, cy: 210, s: 96, color: C.red, crossShadow: C.yellow, shadow: C.lavender, rot: 10, seed: 2 }) +
-    keycap({ x: 230, y: 240, w: 126, h: 116, cap: "lav", legend: "U", shadow: C.red, fleck: C.clear, rot: -10, seed: 3 }) +
+    keycap({ x: 230, y: 240, w: 126, h: 116, cap: "lav", legend: "U", letter: "U", shadow: C.red, fleck: C.clear, rot: -10, seed: 3 }) +
     keycap({ x: 110, y: 380, w: 108, h: 98, cap: "red", shadow: C.lavender, fleck: C.yellow, rot: 8, seed: 4 }) +
     ripple(236, 428, C.yellow, 1, 5, [30, 48, 66]) +
     coil(40, 548, 340, 10, 18, C.clear, 6));
@@ -424,7 +403,7 @@
   const pad = document.getElementById("pad");
   const soundBtn = document.getElementById("sound");
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let sprites = null, current = "butter", soundOn = true;
+  let sprites = null, current = "cherry", soundOn = true;
   const ctx = new (window.AudioContext || window.webkitAudioContext)();
   const buffers = {};
   const spritesPromise = fetch("/sounds/sprites.json").then(r => r.json()).then(j => (sprites = j));
@@ -436,7 +415,9 @@
   // Load the default set as the page opens and the other two once it's idle, so the
   // first key press already has sound. Browsers keep audio suspended until a gesture.
   load(current);
-  (window.requestIdleCallback || (f => setTimeout(f, 1200)))(() => { load("glass"); load("obsidian"); });
+  (window.requestIdleCallback || (f => setTimeout(f, 1200)))(() => {
+    ["kat", "mt3", "xda", "oem", "sa", "dsa"].forEach(load);
+  });
 
   function audio() {
     if (ctx.state === "suspended") ctx.resume();
@@ -479,8 +460,8 @@
   pad.addEventListener("keyup", e => { if (!e.metaKey && !e.ctrlKey) play(keyName(e), "up"); });
   pad.addEventListener("focus", () => { audio(); }, { once: true });
 
-  // CRAFTER keys press under the pointer and play their letter when clicked.
-  document.querySelectorAll("#art-crafter .key").forEach(key => {
+  // Every lettered keycap in the art presses under the pointer and plays its letter when clicked.
+  document.querySelectorAll(".key[data-letter]").forEach(key => {
     const press = () => { key.classList.add("down"); setTimeout(() => key.classList.remove("down"), 110); };
     key.addEventListener("pointerenter", () => { if (!reduce) press(); });
     key.addEventListener("click", () => {
@@ -491,10 +472,11 @@
     });
   });
 
-  document.querySelectorAll(".sets button").forEach(button => button.addEventListener("click", async () => {
+  document.querySelectorAll(".sound-key").forEach(button => button.addEventListener("click", async () => {
     current = button.dataset.set;
-    document.querySelectorAll(".sets button").forEach(b => b.setAttribute("aria-pressed", String(b === button)));
+    document.querySelectorAll(".sound-key").forEach(b => b.setAttribute("aria-pressed", String(b === button)));
     pad.placeholder = `Type here to hear ${button.textContent}…`;
+    document.getElementById("live-profile").textContent = button.textContent;
     // A short "kliq" so the choice is heard right away.
     const word = ["k", "l", "i", "q"];
     for (const [i, k] of word.entries()) {
