@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kliq · Mechanical keyboard sounds for your Mac</title>
-<meta name="description" content="A free, open source macOS menu bar app that plays mechanical keyboard sounds as you type, and goes quiet during calls.">
+<meta name="description" content="A free, open source macOS menu bar app with seven recorded keyboard sound profiles, mouse feedback, and automatic quiet time for calls.">
 <meta property="og:title" content="Kliq">
 <meta property="og:description" content="Every key, heard. Mechanical keyboard sounds for your Mac.">
 <meta property="og:url" content="https://kliq.crafter.run">
@@ -197,30 +197,55 @@
 
       <div class="try">
         <div class="try-head">
-          <h2>Try the switches</h2>
+          <div>
+            <h2>Hear Kliq</h2>
+            <p>Meet the seven recorded profiles included with the app.</p>
+          </div>
+          <div class="profile-status" id="profile-status" aria-live="polite">
+            <span aria-hidden="true">●</span> Cherry selected
+          </div>
+        </div>
+        <div class="soundboard" role="group" aria-label="Sound profile">
+          <button type="button" class="sound-key" data-set="kat" aria-pressed="false">
+            <span class="mini-cap" aria-hidden="true">K</span><span>KAT</span>
+          </button>
+          <button type="button" class="sound-key" data-set="cherry" aria-pressed="true">
+            <span class="mini-cap" aria-hidden="true">C</span><span>Cherry</span>
+          </button>
+          <button type="button" class="sound-key" data-set="mt3" aria-pressed="false">
+            <span class="mini-cap" aria-hidden="true">M</span><span>MT3</span>
+          </button>
+          <button type="button" class="sound-key" data-set="xda" aria-pressed="false">
+            <span class="mini-cap" aria-hidden="true">X</span><span>XDA</span>
+          </button>
+          <button type="button" class="sound-key" data-set="oem" aria-pressed="false">
+            <span class="mini-cap" aria-hidden="true">O</span><span>OEM</span>
+          </button>
+          <button type="button" class="sound-key" data-set="sa" aria-pressed="false">
+            <span class="mini-cap" aria-hidden="true">S</span><span>SA</span>
+          </button>
+          <button type="button" class="sound-key" data-set="dsa" aria-pressed="false">
+            <span class="mini-cap" aria-hidden="true">D</span><span>DSA</span>
+          </button>
         </div>
         <div class="box">
-          <label for="pad" class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Type here to hear the switches</label>
-          <textarea id="pad" rows="3" placeholder="Type here to hear Butter…" spellcheck="false" autocomplete="off"></textarea>
           <div class="bar">
-            <div class="sets" role="group" aria-label="Switch set">
-              <button type="button" id="set-butter" data-set="butter" aria-pressed="true">Butter</button>
-              <button type="button" id="set-glass" data-set="glass" aria-pressed="false">Glass</button>
-              <button type="button" id="set-obsidian" data-set="obsidian" aria-pressed="false">Obsidian</button>
-            </div>
+            <span class="live-label"><i aria-hidden="true"></i><span id="live-profile">Cherry</span> · live keyboard</span>
             <button type="button" class="round" id="sound" aria-pressed="true" aria-label="Sound on">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4V5Z" fill="currentColor"/><path id="wave" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>
             </button>
           </div>
+          <label for="pad" class="sr" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Type here to hear the switches</label>
+          <textarea id="pad" rows="3" placeholder="Type here to hear Cherry…" spellcheck="false" autocomplete="off"></textarea>
         </div>
-        <p class="fineprint">The same sounds the app plays, in your browser. The app plays them for every key, in every app.</p>
+        <p class="fineprint">Hover after your first click to audition. Type to hear the same profiles Kliq plays across your Mac.</p>
       </div>
     </section>
   </div>
 
   <section class="features" aria-label="Features">
     <article class="feature"><div class="well"><svg id="art-switches" viewBox="0 0 320 150" aria-hidden="true"></svg></div>
-      <div class="txt"><h3>Three switches</h3><p>Butter, Glass and Obsidian, synthesized from scratch. Pick one from the menu bar.</p></div></article>
+      <div class="txt"><h3>Seven sound profiles</h3><p>Cherry, DSA, KAT, MT3, OEM, SA and XDA. Every profile is ready from the first launch.</p></div></article>
     <article class="feature"><div class="well"><svg id="art-tune" viewBox="0 0 320 150" aria-hidden="true"></svg></div>
       <div class="txt"><h3>Tune it to taste</h3><p>Shape pitch and brightness, and choose which speakers or headphones play it.</p></div></article>
     <article class="feature"><div class="well"><svg id="art-shortcut" viewBox="0 0 320 150" aria-hidden="true"></svg></div>

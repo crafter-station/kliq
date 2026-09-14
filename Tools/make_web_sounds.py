@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build the website's sound sprites from the app's bundled switch sets.
 
-For each set, the letter keys, space, return and backspace are converted to
+For each profile, the letter keys, space, return and backspace are converted to
 24 kHz mono 16-bit, laid end to end with a short gap in one WAV file, and their
 offsets are written to site/sounds/sprites.json. The site then plays exactly
 what the app plays.
@@ -15,7 +15,16 @@ import tempfile
 import wave
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-SETS = {"butter": "Synth Butter", "glass": "Synth Glass", "obsidian": "Synth Obsidian"}
+# Keep this aligned with SoundLibrary.bundledSetNames and the product UI.
+SETS = {
+    "kat": "KAT",
+    "cherry": "Cherry",
+    "mt3": "MT3",
+    "xda": "XDA",
+    "oem": "OEM",
+    "sa": "SA",
+    "dsa": "DSA",
+}
 RATE = 24_000
 GAP = int(RATE * 0.02)
 
@@ -29,7 +38,7 @@ CODES = {
 
 
 def pcm(path):
-    """Decodes a bundled .caf to 24 kHz mono 16-bit frames with afconvert."""
+    """Decodes a bundled sample to 24 kHz mono 16-bit frames with afconvert."""
     with tempfile.TemporaryDirectory() as tmp:
         out = pathlib.Path(tmp) / "sample.wav"
         subprocess.run(["afconvert", "-f", "WAVE", "-d", f"LEI16@{RATE}", "-c", "1", str(path), str(out)], check=True)
@@ -41,15 +50,34 @@ def pcm(path):
         return data[at + 8:at + 8 + size]
 
 
+def resolved_code(directory, code):
+    """Matches the app's nearest-key fallback when a profile lacks a down sample."""
+    available = sorted(
+        int(path.name.removesuffix("-down.wav"))
+        for path in directory.glob("*-down.wav")
+        if path.name.removesuffix("-down.wav").isdigit()
+    )
+    if not available:
+        return None
+    if code in available:
+        return code
+    main = [candidate for candidate in available if candidate < 100]
+    return min(main or available, key=lambda candidate: (abs(candidate - code), candidate))
+
+
 def main():
     out_dir = ROOT / "site" / "sounds"
     out_dir.mkdir(parents=True, exist_ok=True)
     sprites = {}
     for slug, folder in SETS.items():
+        directory = ROOT / "Resources" / "Sounds" / folder
         audio, offsets = bytearray(), {}
         for key, code in CODES.items():
+            resolved = resolved_code(directory, code)
+            if resolved is None:
+                continue
             for stroke in ("down", "up"):
-                src = ROOT / "Resources" / "Sounds" / folder / f"{code}-{stroke}.caf"
+                src = directory / f"{resolved}-{stroke}.wav"
                 if not src.exists():
                     continue
                 frames = pcm(src)
