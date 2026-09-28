@@ -15,8 +15,8 @@ enum KliqApp {
         app.run()
     }
 
-    /// Never shown as a menu bar for an accessory app, but it still routes ⌘Q, ⌘W and the
-    /// editing shortcuts while one of Kliq's windows is key.
+    /// Never shown as a menu bar for an accessory app, but it still routes ⌘Q, ⌘W, ⌘M,
+    /// ⌘, and ⌘C while one of Kliq's windows is key.
     @MainActor
     private static func makeMainMenu(target: AppDelegate) -> NSMenu {
         let appMenu = NSMenu(title: "Kliq")
@@ -26,15 +26,11 @@ enum KliqApp {
         appMenu.addItem(.separator())
         appMenu.addItem(withTitle: "Quit Kliq", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
 
+        // Only Copy: the version string in About is selectable, and ⌘C reaches the first
+        // responder solely through a menu key equivalent. Nothing in Kliq is editable, so
+        // Cut, Paste, Undo, Redo and Select All have no first responder to act on.
         let editMenu = NSMenu(title: "Edit")
-        editMenu.addItem(withTitle: "Undo", action: Selector(("undo:")), keyEquivalent: "z")
-        editMenu.addItem(withTitle: "Redo", action: Selector(("redo:")), keyEquivalent: "z")
-            .keyEquivalentModifierMask = [.command, .shift]
-        editMenu.addItem(.separator())
-        editMenu.addItem(withTitle: "Cut", action: #selector(NSText.cut(_:)), keyEquivalent: "x")
         editMenu.addItem(withTitle: "Copy", action: #selector(NSText.copy(_:)), keyEquivalent: "c")
-        editMenu.addItem(withTitle: "Paste", action: #selector(NSText.paste(_:)), keyEquivalent: "v")
-        editMenu.addItem(withTitle: "Select All", action: #selector(NSText.selectAll(_:)), keyEquivalent: "a")
 
         let windowMenu = NSMenu(title: "Window")
         windowMenu.addItem(withTitle: "Close", action: #selector(NSWindow.performClose(_:)), keyEquivalent: "w")

@@ -18,7 +18,7 @@ struct SoundBoard: View {
                 Text("Hover to hear · click to choose")
                 Spacer()
                 if let selected = state.availableSets.first(where: { $0.name == settings.selectedSetName }) {
-                    Label(selected.displayName, systemImage: "checkmark.circle.fill")
+                    Label(selected.name, systemImage: "checkmark.circle.fill")
                         .foregroundStyle(Brand.accent)
                 }
             }
@@ -91,7 +91,7 @@ private struct SoundKey: View {
         Button(action: select) {
             VStack(spacing: compact ? 5 : 7) {
                 ZStack(alignment: .bottomTrailing) {
-                    Keycap(label: String(set.displayName.prefix(1)), height: compact ? 30 : 36)
+                    Keycap(label: String(set.name.prefix(1)), height: compact ? 30 : 36)
                         .offset(y: isHovered ? 2 : 0)
                     Image(systemName: isHovered ? "speaker.wave.2.fill" : "waveform")
                         .font(.system(size: 8.5, weight: .semibold))
@@ -101,7 +101,7 @@ private struct SoundKey: View {
                         .overlay(Circle().strokeBorder(Color.primary.opacity(0.12), lineWidth: 0.5))
                         .offset(x: 6, y: 3)
                 }
-                Text(set.displayName)
+                Text(set.name)
                     .font((compact ? Font.caption : Font.subheadline).weight(isSelected ? .semibold : .regular))
                     .lineLimit(1)
             }
@@ -116,8 +116,8 @@ private struct SoundKey: View {
         .shadow(color: Brand.accent.opacity(isHovered ? 0.14 : 0), radius: 7, y: 2)
         .animation(.snappy(duration: 0.18), value: isHovered)
         .animation(.snappy(duration: 0.18), value: isSelected)
-        .help("Preview \(set.displayName)")
-        .accessibilityLabel("\(set.displayName) switches")
+        .help("Preview \(set.name)")
+        .accessibilityLabel("\(set.name) switches")
         .accessibilityHint("Previews and selects this sound")
         .accessibilityAddTraits(isSelected ? .isSelected : [])
     }

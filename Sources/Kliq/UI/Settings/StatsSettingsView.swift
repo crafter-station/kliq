@@ -2,7 +2,6 @@ import SwiftUI
 
 struct StatsSettingsView: View {
     @Environment(StatsManager.self) private var stats
-    @Environment(AppState.self) private var state
     @State private var confirmingReset = false
 
     var body: some View {
@@ -33,7 +32,7 @@ struct StatsSettingsView: View {
                                     .frame(width: 40, alignment: .trailing)
                             }
                         } label: {
-                            setLabel(named: row.name)
+                            Text(row.name)
                         }
                     }
                 }
@@ -49,16 +48,6 @@ struct StatsSettingsView: View {
             Button("Reset Stats", role: .destructive) { stats.reset() }
         } message: {
             Text("Keystroke, click and ding counts start again from zero.")
-        }
-    }
-
-    /// Stats are kept by set name; show the set as it appears everywhere else.
-    @ViewBuilder
-    private func setLabel(named name: String) -> some View {
-        if let set = state.availableSets.first(where: { $0.name == name }) {
-            Text(set.displayName)
-        } else {
-            Text(name)
         }
     }
 }

@@ -61,7 +61,9 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
         button.image = settings.isEnabled ? Self.iconOn : Self.iconOff
         button.setAccessibilityLabel(tip)
         button.toolTip = tip
-        let dim = settings.dimMenuBarIconWhenOff && (!settings.isEnabled || state.isSleeping)
+        // Sleeping always dims: it is the only sign that Kliq muted itself. "Dim when
+        // off" governs the off state, which is what it is named for.
+        let dim = settings.isEnabled ? state.isSleeping : settings.dimMenuBarIconWhenOff
         button.alphaValue = dim ? 0.45 : 1
     }
 
@@ -139,7 +141,7 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
         } else if state.isSleeping {
             header.statusText = "Quiet"
         } else if let selected = state.availableSets.first(where: { $0.name == settings.selectedSetName }) {
-            header.statusText = "On · \(selected.displayName)"
+            header.statusText = "On · \(selected.name)"
         } else {
             header.statusText = "On"
         }
@@ -164,7 +166,7 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
             shownSetNames = names
             setItems.forEach(menu.removeItem)
             setItems = sets.map { set in
-                let item = NSMenuItem(title: set.displayName, action: #selector(selectSet(_:)), keyEquivalent: "")
+                let item = NSMenuItem(title: set.name, action: #selector(selectSet(_:)), keyEquivalent: "")
                 item.target = self
                 item.representedObject = set.name
                 return item
