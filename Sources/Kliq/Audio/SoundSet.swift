@@ -7,7 +7,6 @@ struct SoundSet: Identifiable, Hashable {
     let url: URL
     /// Scan codes that have a `-down` sample, sorted.
     let codes: [Int]
-    let isBuiltIn: Bool
 
     var id: String { name }
     var keyCount: Int { codes.count }
@@ -24,7 +23,7 @@ struct SoundSet: Identifiable, Hashable {
     }
 
     /// Builds a set from a directory, or nil if it holds no `<code>-down` samples.
-    static func load(directory: URL, isBuiltIn: Bool) -> SoundSet? {
+    static func load(directory: URL) -> SoundSet? {
         guard let files = try? FileManager.default.contentsOfDirectory(
             at: directory, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles]) else { return nil }
         var codes = Set<Int>()
@@ -34,7 +33,7 @@ struct SoundSet: Identifiable, Hashable {
             codes.insert(code)
         }
         guard !codes.isEmpty else { return nil }
-        return SoundSet(name: directory.lastPathComponent, url: directory, codes: codes.sorted(), isBuiltIn: isBuiltIn)
+        return SoundSet(name: directory.lastPathComponent, url: directory, codes: codes.sorted())
     }
 }
 
@@ -50,7 +49,7 @@ enum SoundLibrary {
     static func discover() -> [SoundSet] {
         guard let root = bundledDirectory else { return [] }
         return bundledSetNames.compactMap { name in
-            SoundSet.load(directory: root.appendingPathComponent(name, isDirectory: true), isBuiltIn: true)
+            SoundSet.load(directory: root.appendingPathComponent(name, isDirectory: true))
         }
     }
 

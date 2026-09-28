@@ -96,6 +96,8 @@ final class AudioOutputDevices {
         guard AudioObjectGetPropertyDataSize(system, &address, 0, nil, &size) == noErr, size > 0 else { return [] }
         var ids = [AudioObjectID](repeating: 0, count: Int(size) / MemoryLayout<AudioObjectID>.size)
         guard AudioObjectGetPropertyData(system, &address, 0, nil, &size, &ids) == noErr else { return [] }
+        // `size` was rewritten by the call above to the bytes actually used, which is
+        // fewer than asked for when a device goes away between the two calls.
         return Array(ids.prefix(Int(size) / MemoryLayout<AudioObjectID>.size))
     }
 

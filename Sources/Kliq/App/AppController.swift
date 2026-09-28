@@ -267,7 +267,7 @@ final class AppController {
         engine.load(set: set) { [weak self] count in
             guard let self else { return }
             self.state.currentSetName = set.name
-            self.state.statusMessage = count == 0 ? "Kliq couldn't play \(set.displayName). Choose another switch set." : nil
+            self.state.statusMessage = count == 0 ? "Kliq couldn't play \(set.name). Choose another switch set." : nil
             if self.previewWhenLoaded {
                 self.previewWhenLoaded = false
                 if count > 0 { self.engine.preview() }

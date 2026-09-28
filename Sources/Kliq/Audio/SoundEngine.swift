@@ -39,13 +39,6 @@ final class SoundEngine {
         case click(down: Bool)
     }
 
-    /// Players connect straight to the mixer. Pitch variation and tone are baked into
-    /// the scheduled buffer (see `repitched` and `tilted`) instead of a varispeed or EQ
-    /// unit per voice, which would process silence continuously and cost CPU while idle.
-    private struct Voice {
-        let player: AVAudioPlayerNode
-    }
-
     /// Decoded samples for one set, keyed by scan code, plus the shared effects.
     private struct Bank {
         var name = ""
@@ -85,8 +78,11 @@ final class SoundEngine {
 
     private let engine = AVAudioEngine()
     private let format = AVAudioFormat(standardFormatWithSampleRate: 48_000, channels: 2)!
-    private var keyVoices: [Voice] = []
-    private var effectVoices: [Voice] = []
+    /// Players connect straight to the mixer. Pitch variation and tone are baked into
+    /// the scheduled buffer (see `repitched` and `tilted`) instead of a varispeed or EQ
+    /// unit per voice, which would process silence continuously and cost CPU while idle.
+    private var keyVoices: [AVAudioPlayerNode] = []
+    private var effectVoices: [AVAudioPlayerNode] = []
     private var keyVoiceIndex = 0
     private var effectVoiceIndex = 0
     private let lock = NSLock()
@@ -362,15 +358,15 @@ final class SoundEngine {
         play(buffer, on: nextEffectVoice(), gain: gain, pitch: pitch, pan: 0)
     }
 
-    private func play(_ buffer: AVAudioPCMBuffer, on voice: Voice, gain: Float, pitch: Float, pan: Float, brightness: Float = 0) {
+    private func play(_ buffer: AVAudioPCMBuffer, on player: AVAudioPlayerNode, gain: Float, pitch: Float, pan: Float, brightness: Float = 0) {
         let pitched = Self.repitched(buffer, rate: pitch)
         let toned = Self.tilted(pitched, by: brightness, inPlace: pitched !== buffer)
         audioQueue.async { [self] in
             guard ensureRunning() else { return }
-            voice.player.pan = pan
-            voice.player.volume = gain
-            voice.player.scheduleBuffer(toned, at: nil, options: .interrupts)
-            if !voice.player.isPlaying { voice.player.play() }
+            player.pan = pan
+            player.volume = gain
+            player.scheduleBuffer(toned, at: nil, options: .interrupts)
+            if !player.isPlaying { player.play() }
         }
     }
 
@@ -407,27 +403,25 @@ final class SoundEngine {
         audioQueue.asyncAfter(deadline: .now() + Self.idlePause, execute: work)
     }
 
-    private func nextVoice() -> Voice {
+    private func nextVoice() -> AVAudioPlayerNode {
         lock.withLock {
-            let voice = keyVoices[keyVoiceIndex]
-            keyVoiceIndex = (keyVoiceIndex + 1) % keyVoices.count
-            return voice
+            defer { keyVoiceIndex = (keyVoiceIndex + 1) % keyVoices.count }
+            return keyVoices[keyVoiceIndex]
         }
     }
 
-    private func nextEffectVoice() -> Voice {
+    private func nextEffectVoice() -> AVAudioPlayerNode {
         lock.withLock {
-            let voice = effectVoices[effectVoiceIndex]
-            effectVoiceIndex = (effectVoiceIndex + 1) % effectVoices.count
-            return voice
+            defer { effectVoiceIndex = (effectVoiceIndex + 1) % effectVoices.count }
+            return effectVoices[effectVoiceIndex]
         }
     }
 
-    private func makeVoice() -> Voice {
+    private func makeVoice() -> AVAudioPlayerNode {
         let player = AVAudioPlayerNode()
         engine.attach(player)
         engine.connect(player, to: engine.mainMixerNode, format: format)
-        return Voice(player: player)
+        return player
     }
 
     /// Returns `buffer` played back at `rate` (above 1 is higher and shorter), by

@@ -46,7 +46,7 @@ struct GeneralSettingsView: View {
                 SettingsSection {
                     Toggle(isOn: $settings.dimMenuBarIconWhenOff) {
                         Text("Dim menu bar icon when off")
-                        Text("Also while Kliq is quiet.")
+                        Text("Kliq always dims while it's quiet.")
                     }
                 }
 
@@ -84,7 +84,7 @@ struct GeneralSettingsView: View {
         if !state.accessibilityGranted { return "Finish setup to hear keys and clicks." }
         if state.isSleeping { return "Sounds come back on their own." }
         guard let set = state.availableSets.first(where: { $0.name == state.currentSetName }) else { return nil }
-        return "Playing \(set.displayName)"
+        return "Playing \(set.name)"
     }
 }
 
