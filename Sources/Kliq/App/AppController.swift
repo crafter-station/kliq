@@ -97,6 +97,22 @@ final class AppController {
         sleep.wake()
     }
 
+    func restart() {
+        let reopen = Process()
+        reopen.executableURL = URL(fileURLWithPath: "/bin/sh")
+        // The new copy opens once this process has exited: before that, `open` would only
+        // bring this copy forward, and this copy still holds the shortcut and the event tap.
+        reopen.arguments = ["-c", "while kill -0 \"$0\" 2>/dev/null; do sleep 0.1; done; exec /usr/bin/open \"$1\"",
+                            String(getpid()), Bundle.main.bundlePath]
+        do {
+            try reopen.run()
+        } catch {
+            log.error("Restart failed: \(error.localizedDescription, privacy: .public)")
+            return
+        }
+        NSApp.terminate(nil)
+    }
+
     func previewCurrentSet() {
         engine.preview()
     }
