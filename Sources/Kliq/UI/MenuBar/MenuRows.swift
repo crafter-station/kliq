@@ -9,9 +9,10 @@ enum MenuMetrics {
     static let trailing: CGFloat = 14
 }
 
-/// The top row: app name, live state and the switch that turns sounds on and off.
 final class MenuHeaderView: NSView {
     let toggle = NSSwitch()
+    let restart = NSButton(image: NSImage(systemSymbolName: "arrow.clockwise", accessibilityDescription: nil)!,
+                           target: nil, action: nil)
     private let status = NSTextField(labelWithString: "")
 
     init() {
@@ -29,7 +30,12 @@ final class MenuHeaderView: NSView {
         toggle.controlSize = .mini
         toggle.setAccessibilityLabel("Kliq")
 
-        for view in [title, status, toggle] {
+        restart.isBordered = false
+        restart.contentTintColor = .secondaryLabelColor
+        restart.toolTip = "Restart Kliq"
+        restart.setAccessibilityLabel("Restart Kliq")
+
+        for view in [title, status, restart, toggle] {
             view.translatesAutoresizingMaskIntoConstraints = false
             addSubview(view)
         }
@@ -40,6 +46,8 @@ final class MenuHeaderView: NSView {
             status.topAnchor.constraint(equalTo: title.bottomAnchor, constant: -1),
             toggle.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -MenuMetrics.trailing),
             toggle.centerYAnchor.constraint(equalTo: centerYAnchor),
+            restart.trailingAnchor.constraint(equalTo: toggle.leadingAnchor, constant: -8),
+            restart.centerYAnchor.constraint(equalTo: centerYAnchor),
         ])
     }
 

@@ -102,6 +102,7 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
 
     private func build() {
         connect(header.toggle, #selector(enabledChanged(_:)))
+        connect(header.restart, #selector(restartKliq))
         menu.addItem(viewItem(header))
 
         connect(accessNotice.button, #selector(allowAccess))
@@ -227,6 +228,11 @@ final class StatusMenuController: NSObject, NSMenuDelegate {
     @objc private func wakeNow() {
         menu.cancelTracking()
         controller.wake()
+    }
+
+    @objc private func restartKliq() {
+        menu.cancelTracking()
+        controller.restart()
     }
 
     @objc private func allowAccess() {
